@@ -1855,15 +1855,19 @@ namespace KI_RnB
                     while ((input = sr.ReadLine()) != null)
                     {
                         string[] data = input.Split('|');
+                        if (data.Length < 8) continue;
+                        int crvTime, crvSpeed;
+                        if (!int.TryParse(data[1], out crvTime)) crvTime = 0;
+                        if (!int.TryParse(data[3], out crvSpeed)) crvSpeed = 0;
 
-                        Sum_Time += int.Parse(data[1]);
+                        Sum_Time += crvTime;
 
                         G_Data.Add(new Curve_Data
                         {
                             Segment = data[0].ToUpper(),
-                            Time = int.Parse(data[1]),
+                            Time = crvTime,
                             T_Time = Sum_Time,
-                            Speed = int.Parse(data[3]),
+                            Speed = crvSpeed,
                             Items = data[4],
                             Vehicle = data[5],
                             Roll = data[6],
@@ -2062,14 +2066,17 @@ namespace KI_RnB
 
                     if (x_1 != "" && x_2 != "" && x_3 != "" && x_4 != "" && x_5 != "" && x_6 != "" && x_7 != "" && x_8 != "")
                     {
-                        Sum_Time += int.Parse(x_2);
+                        int xTime, xSpeed;
+                        if (!int.TryParse(x_2, out xTime)) xTime = 0;
+                        if (!int.TryParse(x_4, out xSpeed)) xSpeed = 0;
+                        Sum_Time += xTime;
 
                         G_Data.Add(new Curve_Data
                         {
                             Segment = x_1,
-                            Time = int.Parse(x_2),
+                            Time = xTime,
                             T_Time = Sum_Time,
-                            Speed = int.Parse(x_4),
+                            Speed = xSpeed,
                             Items = x_5,
                             Vehicle = x_6,
                             Roll = x_7,
@@ -2321,14 +2328,17 @@ namespace KI_RnB
                     x_7 = xlSheet.Cells[cnt, 7].Value2.ToString();
                     x_8 = xlSheet.Cells[cnt, 8].Value2.ToString();
 
-                    Sum_Time += int.Parse(x_2);
+                    int xTime2, xSpeed2;
+                    if (!int.TryParse(x_2, out xTime2)) xTime2 = 0;
+                    if (!int.TryParse(x_4, out xSpeed2)) xSpeed2 = 0;
+                    Sum_Time += xTime2;
 
                     G_Data.Add(new Curve_Data
                     {
                         Segment = x_1,
-                        Time = int.Parse(x_2),
+                        Time = xTime2,
                         T_Time = Sum_Time,
-                        Speed = int.Parse(x_4),
+                        Speed = xSpeed2,
                         Items = x_5,
                         Vehicle = x_6,
                         Roll = x_7,
@@ -2560,15 +2570,17 @@ namespace KI_RnB
         {
             StringBuilder Ret = new StringBuilder(500);
             int Flag = GetPrivateProfileString(Section, Key, "", Ret, 500, Set_Path);
-            if (Ret.ToString() == "") Ret.Insert(0, '0');
-            return double.Parse(Ret.ToString());
+            double val;
+            if (!double.TryParse(Ret.ToString(), out val)) val = 0;
+            return val;
         }
         public float GetIni_Float(string Section, string Key)
         {
             StringBuilder Ret = new StringBuilder(500);
             int Flag = GetPrivateProfileString(Section, Key, "", Ret, 500, Set_Path);
-            if (Ret.ToString() == "") Ret.Insert(0, '0');
-            return float.Parse(Ret.ToString());
+            float val;
+            if (!float.TryParse(Ret.ToString(), out val)) val = 0;
+            return val;
         }
 
         // INI파일쓰기함수(섹션,키값설정)

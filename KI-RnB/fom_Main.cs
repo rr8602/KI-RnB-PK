@@ -318,7 +318,7 @@ namespace KI_RnB
                 NI.Init();
                 NI.Start();
 
-                ABSBoard.Setting(PSet.Ctrl_S, PSet.Ctrl_P.ToString(), 0);
+                //ABSBoard.Setting(PSet.Ctrl_S, PSet.Ctrl_P.ToString(), 0);
                 Barcode1.Setting(PSet.BarC1S, PSet.BarC1P.ToString());
                 Pedal.Setting(PSet.PedalS, PSet.PedalP.ToString());
 
@@ -570,17 +570,18 @@ namespace KI_RnB
                 lblParam.Text = Standard.Sel_Parameter(TSet.CarModel);
 
                 string SelWBase = "";
+                int carWbase; int.TryParse(DB_All.DBModel.dbCarWbase, out carWbase);
 
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_A) SelWBase = "1";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_B) SelWBase = "2";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_C) SelWBase = "3";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_D) SelWBase = "4";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_E) SelWBase = "5";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_F) SelWBase = "6";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_G) SelWBase = "7";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_H) SelWBase = "8";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_I) SelWBase = "9";
-                if (int.Parse(DB_All.DBModel.dbCarWbase) == PLC.OfSetL + PLC.Dist_J) SelWBase = "10";
+                if (carWbase == PLC.OfSetL + PLC.Dist_A) SelWBase = "1";
+                if (carWbase == PLC.OfSetL + PLC.Dist_B) SelWBase = "2";
+                if (carWbase == PLC.OfSetL + PLC.Dist_C) SelWBase = "3";
+                if (carWbase == PLC.OfSetL + PLC.Dist_D) SelWBase = "4";
+                if (carWbase == PLC.OfSetL + PLC.Dist_E) SelWBase = "5";
+                if (carWbase == PLC.OfSetL + PLC.Dist_F) SelWBase = "6";
+                if (carWbase == PLC.OfSetL + PLC.Dist_G) SelWBase = "7";
+                if (carWbase == PLC.OfSetL + PLC.Dist_H) SelWBase = "8";
+                if (carWbase == PLC.OfSetL + PLC.Dist_I) SelWBase = "9";
+                if (carWbase == PLC.OfSetL + PLC.Dist_J) SelWBase = "10";
 
                 PLC.DO.Vehicle01 = false;
                 PLC.DO.Vehicle02 = false;
@@ -606,7 +607,8 @@ namespace KI_RnB
                     case "9": PLC.DO.Vehicle09 = true; break;
                     case "10": PLC.DO.Vehicle10 = true; break;
                     default:
-                        PLC.PLC_WhelBase(int.Parse(DB_All.DBModel.dbCarWbase));
+                        int wbase; int.TryParse(DB_All.DBModel.dbCarWbase, out wbase);
+                        PLC.PLC_WhelBase(wbase);
                         H2Y.Sleep(100);
                         PLC.DO.Vehicle10 = true;
                         break;
@@ -686,8 +688,7 @@ namespace KI_RnB
                 case "btn_BRKs": BRKs_Running();                break;
                 case "btn__Ask": ASK__Running();                break;
 
-                case "btnFlash": if (txtFlash.Text == "") return;
-                                 int idx = int.Parse(txtFlash.Text.ToString());
+                case "btnFlash": int idx; if (!int.TryParse(txtFlash.Text, out idx)) return;
 
                                           FomFlash.Play(idx);
                                             break;
@@ -1317,29 +1318,30 @@ namespace KI_RnB
         {
             if (Nidec.IsOpen)
             {
-                TSet.Nidec_FL.Status = int.Parse(txt_FL_0.Text);
-                TSet.Nidec_FL.CalSpd = int.Parse(txt_FL_1.Text);
-                TSet.Nidec_FL.WSSSpd = int.Parse(txt_FL_2.Text);
-                TSet.Nidec_FL.PB_Toq = int.Parse(txt_FL_3.Text);
-                TSet.Nidec_FL.PB_Spd = int.Parse(txt_FL_4.Text);
+                int tmp;
+                TSet.Nidec_FL.Status = int.TryParse(txt_FL_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.CalSpd = int.TryParse(txt_FL_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.WSSSpd = int.TryParse(txt_FL_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.PB_Toq = int.TryParse(txt_FL_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.PB_Spd = int.TryParse(txt_FL_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_FR.Status = int.Parse(txt_FR_0.Text);
-                TSet.Nidec_FR.CalSpd = int.Parse(txt_FR_1.Text);
-                TSet.Nidec_FR.WSSSpd = int.Parse(txt_FR_2.Text);
-                TSet.Nidec_FR.PB_Toq = int.Parse(txt_FR_3.Text);
-                TSet.Nidec_FR.PB_Spd = int.Parse(txt_FR_4.Text);
+                TSet.Nidec_FR.Status = int.TryParse(txt_FR_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.CalSpd = int.TryParse(txt_FR_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.WSSSpd = int.TryParse(txt_FR_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.PB_Toq = int.TryParse(txt_FR_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.PB_Spd = int.TryParse(txt_FR_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_RL.Status = int.Parse(txt_RL_0.Text);
-                TSet.Nidec_RL.CalSpd = int.Parse(txt_RL_1.Text);
-                TSet.Nidec_RL.WSSSpd = int.Parse(txt_RL_2.Text);
-                TSet.Nidec_RL.PB_Toq = int.Parse(txt_RL_3.Text);
-                TSet.Nidec_RL.PB_Spd = int.Parse(txt_RL_4.Text);
+                TSet.Nidec_RL.Status = int.TryParse(txt_RL_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.CalSpd = int.TryParse(txt_RL_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.WSSSpd = int.TryParse(txt_RL_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.PB_Toq = int.TryParse(txt_RL_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.PB_Spd = int.TryParse(txt_RL_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_RR.Status = int.Parse(txt_RR_0.Text);
-                TSet.Nidec_RR.CalSpd = int.Parse(txt_RR_1.Text);
-                TSet.Nidec_RR.WSSSpd = int.Parse(txt_RR_2.Text);
-                TSet.Nidec_RR.PB_Toq = int.Parse(txt_RR_3.Text);
-                TSet.Nidec_RR.PB_Spd = int.Parse(txt_RR_4.Text);
+                TSet.Nidec_RR.Status = int.TryParse(txt_RR_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.CalSpd = int.TryParse(txt_RR_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.WSSSpd = int.TryParse(txt_RR_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.PB_Toq = int.TryParse(txt_RR_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.PB_Spd = int.TryParse(txt_RR_4.Text, out tmp) ? tmp : 0;
 
                 Nidec.All_Write();
                 H2Y.Sleep(300);
@@ -1753,8 +1755,7 @@ namespace KI_RnB
         #region Test
         private void btn_DSet_Click(object sender, EventArgs e)
         {
-            if (txt_DSet.Text == "") { return; }
-            int Mv_Lent = int.Parse(txt_DSet.Text);
+            int Mv_Lent; if (!int.TryParse(txt_DSet.Text, out Mv_Lent)) return;
             PLC.PLC_WhelBase(Mv_Lent);
         }
 

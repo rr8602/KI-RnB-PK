@@ -115,7 +115,7 @@ namespace KI_RnB
             {
                 IsOpen = false;
                 threadStop = true;
-                if (Get_Mode == 0)
+                if (Get_Mode == 0 && thread_ABSB != null)
                 {
                     thread_ABSB.Abort();
                 }
@@ -149,7 +149,7 @@ namespace KI_RnB
 
             try
             {
-                int mBaudRate = int.Parse(arStr[0]);
+                int mBaudRate; if (!int.TryParse(arStr[0], out mBaudRate)) return false;
 
                 Parity mParity_B;
                 switch (arStr[1].ToUpper())
@@ -162,7 +162,7 @@ namespace KI_RnB
                     default: mParity_B = Parity.None; break;
                 }
 
-                int mData_Bit = int.Parse(arStr[2]);
+                int mData_Bit; if (!int.TryParse(arStr[2], out mData_Bit)) return false;
                 StopBits mStop_Bit;
                 switch (arStr[3].ToUpper())
                 {

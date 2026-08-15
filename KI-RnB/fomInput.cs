@@ -51,7 +51,9 @@ namespace KI_RnB
 
             if (Inp_Mode == 2 || Inp_Mode == 3 || Inp_Mode == 4 || Inp_Mode == 5)
             {
-                float val = float.Parse(pValue) / PSet.BrkRatio;
+                float val;
+                if (!float.TryParse(pValue, out val)) val = 0;
+                if (PSet.BrkRatio != 0) val = val / PSet.BrkRatio;
 
                 txtInput.Text = val.ToString("#0");
             }
@@ -74,12 +76,12 @@ namespace KI_RnB
 
                     switch (Inp_Mode)
                     {
-                        case 0: PSet.CH0Span = H2Y.DVD(float.Parse(strValue), PSet.CH0Last); IsLock = 0; break;
-                        case 1: PSet.CH1Span = H2Y.DVD(float.Parse(strValue), PSet.CH1Last); IsLock = 0; break;
-                        case 2: PSet.CH2Span = H2Y.DVD(float.Parse(strValue), PSet.CH2Last); IsLock = 0; break;
-                        case 3: PSet.CH3Span = H2Y.DVD(float.Parse(strValue), PSet.CH3Last); IsLock = 0; break;
-                        case 4: PSet.CH4Span = H2Y.DVD(float.Parse(strValue) * PSet.BrkRatio, PSet.CH4Last); IsLock = 0; break;
-                        case 5: PSet.CH5Span = H2Y.DVD(float.Parse(strValue) * PSet.BrkRatio, PSet.CH5Last); IsLock = 0; break;
+                        case 0: { float v; if (float.TryParse(strValue, out v)) { PSet.CH0Span = H2Y.DVD(v, PSet.CH0Last); IsLock = 0; } } break;
+                        case 1: { float v; if (float.TryParse(strValue, out v)) { PSet.CH1Span = H2Y.DVD(v, PSet.CH1Last); IsLock = 0; } } break;
+                        case 2: { float v; if (float.TryParse(strValue, out v)) { PSet.CH2Span = H2Y.DVD(v, PSet.CH2Last); IsLock = 0; } } break;
+                        case 3: { float v; if (float.TryParse(strValue, out v)) { PSet.CH3Span = H2Y.DVD(v, PSet.CH3Last); IsLock = 0; } } break;
+                        case 4: { float v; if (float.TryParse(strValue, out v)) { PSet.CH4Span = H2Y.DVD(v * PSet.BrkRatio, PSet.CH4Last); IsLock = 0; } } break;
+                        case 5: { float v; if (float.TryParse(strValue, out v)) { PSet.CH5Span = H2Y.DVD(v * PSet.BrkRatio, PSet.CH5Last); IsLock = 0; } } break;
                         case 98: IsLock = Ret_Password(strValue); break;
                         case 99: IsLock = Ret_Password(strValue); break;
                     }

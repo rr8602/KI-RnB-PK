@@ -599,21 +599,23 @@ namespace KI_RnB
         }
         private void PLCWriteData()
         {
-            int Offset_L = int.Parse(txtSetLH.Text);
-            int Offset_R = int.Parse(txtSetRH.Text);
+            int Offset_L, Offset_R;
+            if (!int.TryParse(txtSetLH.Text, out Offset_L)) return;
+            if (!int.TryParse(txtSetRH.Text, out Offset_R)) return;
 
             int[] Lent = new int[12];
+            int tmp;
 
-            Lent[0] = int.Parse(txtSet01.Text) - Offset_L;
-            Lent[1] = int.Parse(txtSet02.Text) - Offset_L;
-            Lent[2] = int.Parse(txtSet03.Text) - Offset_L;
-            Lent[3] = int.Parse(txtSet04.Text) - Offset_L;
-            Lent[4] = int.Parse(txtSet05.Text) - Offset_L;
-            Lent[5] = int.Parse(txtSet06.Text) - Offset_L;
-            Lent[6] = int.Parse(txtSet07.Text) - Offset_L;
-            Lent[7] = int.Parse(txtSet08.Text) - Offset_L;
-            Lent[8] = int.Parse(txtSet09.Text) - Offset_L;
-            Lent[9] = int.Parse(txtSet10.Text) - Offset_L;
+            Lent[0] = int.TryParse(txtSet01.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[1] = int.TryParse(txtSet02.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[2] = int.TryParse(txtSet03.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[3] = int.TryParse(txtSet04.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[4] = int.TryParse(txtSet05.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[5] = int.TryParse(txtSet06.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[6] = int.TryParse(txtSet07.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[7] = int.TryParse(txtSet08.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[8] = int.TryParse(txtSet09.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[9] = int.TryParse(txtSet10.Text, out tmp) ? tmp - Offset_L : 0;
             Lent[10] = Offset_L;
             Lent[11] = Offset_R;
 
@@ -1037,7 +1039,7 @@ namespace KI_RnB
             if (stt >= ett) return 0;
 
             string val = pName.Substring(stt + 1, (ett - stt) - 1);
-            int Idx = Convert.ToInt32(val);
+            int Idx; if (!int.TryParse(val, out Idx)) return 0;
 
             return Idx;
         }
@@ -1114,12 +1116,12 @@ namespace KI_RnB
         }
         private void Speed_Change(int pMode)
         {
-            float value = float.Parse(txt_UpDn.Text);
-
-            float W_FL = float.Parse(txt_W_FL.Text);
-            float W_FR = float.Parse(txt_W_FR.Text);
-            float W_RL = float.Parse(txt_W_RL.Text);
-            float W_RR = float.Parse(txt_W_RR.Text);
+            float value, W_FL, W_FR, W_RL, W_RR;
+            if (!float.TryParse(txt_UpDn.Text, out value)) return;
+            if (!float.TryParse(txt_W_FL.Text, out W_FL)) return;
+            if (!float.TryParse(txt_W_FR.Text, out W_FR)) return;
+            if (!float.TryParse(txt_W_RL.Text, out W_RL)) return;
+            if (!float.TryParse(txt_W_RR.Text, out W_RR)) return;
 
             switch (pMode)
             {
@@ -1203,7 +1205,8 @@ namespace KI_RnB
 
         private void lblValue_DoubleClick(object sender, EventArgs e)
         {
-            fom_PsWd pass = new fom_PsWd(float.Parse(((Label)sender).Text));
+            float lblVal; if (!float.TryParse(((Label)sender).Text, out lblVal)) return;
+            fom_PsWd pass = new fom_PsWd(lblVal);
 
             try
             {
@@ -1229,8 +1232,11 @@ namespace KI_RnB
         {
             try
             {
-                PSet.Av_Filt = int.Parse(txtAFilt.Text);
-                PSet.St_Filt = int.Parse(txtSFilt.Text);
+                int avFilt, stFilt;
+                if (!int.TryParse(txtAFilt.Text, out avFilt)) return;
+                if (!int.TryParse(txtSFilt.Text, out stFilt)) return;
+                PSet.Av_Filt = avFilt;
+                PSet.St_Filt = stFilt;
                 PSet.Filter = cbo_Filt.SelectedIndex;
 
                 PSet.CH0Zero = H2Y.toInt(lbl0Zero.Text);
@@ -1390,7 +1396,8 @@ namespace KI_RnB
                 if (Ret.ToUpper() == "TRUE")
                 {
                     lbl_Msg0.BackColor = Color.Lime;
-                    if (int.Parse(Msgs) < cnt)
+                    int msgsVal; int.TryParse(Msgs, out msgsVal);
+                    if (msgsVal < cnt)
                     {
                         lbl_Msg1.BackColor = Color.Lime;
                     }
@@ -1426,6 +1433,7 @@ namespace KI_RnB
         
         private void cbo_ECUs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cbo_ECUs.SelectedIndex < 0) return;
             ECUs.ECU_Selector(cbo_ECUs.Items[cbo_ECUs.SelectedIndex].ToString());
             txtSetID.Text = ECUs.Set_ID;
             txtGetID.Text = ECUs.Ret_ID;
@@ -1820,29 +1828,30 @@ namespace KI_RnB
         {
             if (main.Nidec.IsOpen)
             {
-                TSet.Nidec_FL.Status = int.Parse(txt_FL_0.Text);
-                TSet.Nidec_FL.CalSpd = int.Parse(txt_FL_1.Text);
-                TSet.Nidec_FL.WSSSpd = int.Parse(txt_FL_2.Text);
-                TSet.Nidec_FL.PB_Toq = int.Parse(txt_FL_3.Text);
-                TSet.Nidec_FL.PB_Spd = int.Parse(txt_FL_4.Text);
+                int tmp;
+                TSet.Nidec_FL.Status = int.TryParse(txt_FL_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.CalSpd = int.TryParse(txt_FL_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.WSSSpd = int.TryParse(txt_FL_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.PB_Toq = int.TryParse(txt_FL_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FL.PB_Spd = int.TryParse(txt_FL_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_FR.Status = int.Parse(txt_FR_0.Text);
-                TSet.Nidec_FR.CalSpd = int.Parse(txt_FR_1.Text);
-                TSet.Nidec_FR.WSSSpd = int.Parse(txt_FR_2.Text);
-                TSet.Nidec_FR.PB_Toq = int.Parse(txt_FR_3.Text);
-                TSet.Nidec_FR.PB_Spd = int.Parse(txt_FR_4.Text);
+                TSet.Nidec_FR.Status = int.TryParse(txt_FR_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.CalSpd = int.TryParse(txt_FR_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.WSSSpd = int.TryParse(txt_FR_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.PB_Toq = int.TryParse(txt_FR_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_FR.PB_Spd = int.TryParse(txt_FR_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_RL.Status = int.Parse(txt_RL_0.Text);
-                TSet.Nidec_RL.CalSpd = int.Parse(txt_RL_1.Text);
-                TSet.Nidec_RL.WSSSpd = int.Parse(txt_RL_2.Text);
-                TSet.Nidec_RL.PB_Toq = int.Parse(txt_RL_3.Text);
-                TSet.Nidec_RL.PB_Spd = int.Parse(txt_RL_4.Text);
+                TSet.Nidec_RL.Status = int.TryParse(txt_RL_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.CalSpd = int.TryParse(txt_RL_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.WSSSpd = int.TryParse(txt_RL_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.PB_Toq = int.TryParse(txt_RL_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RL.PB_Spd = int.TryParse(txt_RL_4.Text, out tmp) ? tmp : 0;
 
-                TSet.Nidec_RR.Status = int.Parse(txt_RR_0.Text);
-                TSet.Nidec_RR.CalSpd = int.Parse(txt_RR_1.Text);
-                TSet.Nidec_RR.WSSSpd = int.Parse(txt_RR_2.Text);
-                TSet.Nidec_RR.PB_Toq = int.Parse(txt_RR_3.Text);
-                TSet.Nidec_RR.PB_Spd = int.Parse(txt_RR_4.Text);
+                TSet.Nidec_RR.Status = int.TryParse(txt_RR_0.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.CalSpd = int.TryParse(txt_RR_1.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.WSSSpd = int.TryParse(txt_RR_2.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.PB_Toq = int.TryParse(txt_RR_3.Text, out tmp) ? tmp : 0;
+                TSet.Nidec_RR.PB_Spd = int.TryParse(txt_RR_4.Text, out tmp) ? tmp : 0;
 
                 main.Nidec.All_Write();
                 //H2Y.Sleep(1000);

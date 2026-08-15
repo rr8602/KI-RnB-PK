@@ -34,9 +34,11 @@ namespace KI_RnB
             if (PSet.NIDAQmx_Read())
             {
                 zIndexEnabledCheckBox.Checked = PSet.ENC_Z_On == "1" ? true : false;
-                decodingTypeComboBox.SelectedIndex = int.Parse(PSet.ENC_Type);
+                int encType; int.TryParse(PSet.ENC_Type, out encType);
+                decodingTypeComboBox.SelectedIndex = (encType >= 0 && encType < decodingTypeComboBox.Items.Count) ? encType : 0;
                 zIndexValueTextBox.Text = PSet.ENC_ZVal;
-                zIndexPhaseComboBox.SelectedIndex = int.Parse(PSet.ENCPhase);
+                int encPhase; int.TryParse(PSet.ENCPhase, out encPhase);
+                zIndexPhaseComboBox.SelectedIndex = (encPhase >= 0 && encPhase < zIndexPhaseComboBox.Items.Count) ? encPhase : 0;
                 pulsePerRevTextBox.Text = PSet.ENCPulse;
 
                 rateTextBox.Text = PSet.ScanRate;

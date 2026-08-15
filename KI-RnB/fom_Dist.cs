@@ -58,8 +58,9 @@ namespace KI_RnB
         {
             try
             {
-                int offset = int.Parse(txtLHome.Text);
-                int value_ = int.Parse(((TextBox)sender).Text);
+                int offset, value_;
+                if (!int.TryParse(txtLHome.Text, out offset)) return;
+                if (!int.TryParse(((TextBox)sender).Text, out value_)) return;
 
                 ((TextBox)sender).BackColor = Color.White;
 
@@ -133,21 +134,23 @@ namespace KI_RnB
 
         private void PLCWriteData()
         {
-            int Offset_L = int.Parse(txtLHome.Text);
-            int Offset_R = int.Parse(txtRHome.Text);
+            int Offset_L, Offset_R;
+            if (!int.TryParse(txtLHome.Text, out Offset_L)) return;
+            if (!int.TryParse(txtRHome.Text, out Offset_R)) return;
 
             int[] Lent = new int[12];
+            int tmp;
 
-            Lent[0] = int.Parse(txtDistA.Text) - Offset_L;
-            Lent[1] = int.Parse(txtDistB.Text) - Offset_L;
-            Lent[2] = int.Parse(txtDistC.Text) - Offset_L;
-            Lent[3] = int.Parse(txtDistD.Text) - Offset_L;
-            Lent[4] = int.Parse(txtDistE.Text) - Offset_L;
-            Lent[5] = int.Parse(txtDistF.Text) - Offset_L;
-            Lent[6] = int.Parse(txtDistG.Text) - Offset_L;
-            Lent[7] = int.Parse(txtDistH.Text) - Offset_L;
-            Lent[8] = int.Parse(txtDistI.Text) - Offset_L;
-            Lent[9] = int.Parse(txtDistJ.Text) - Offset_L;
+            Lent[0] = int.TryParse(txtDistA.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[1] = int.TryParse(txtDistB.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[2] = int.TryParse(txtDistC.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[3] = int.TryParse(txtDistD.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[4] = int.TryParse(txtDistE.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[5] = int.TryParse(txtDistF.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[6] = int.TryParse(txtDistG.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[7] = int.TryParse(txtDistH.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[8] = int.TryParse(txtDistI.Text, out tmp) ? tmp - Offset_L : 0;
+            Lent[9] = int.TryParse(txtDistJ.Text, out tmp) ? tmp - Offset_L : 0;
             Lent[10] = Offset_L;
             Lent[11] = Offset_R;    
 

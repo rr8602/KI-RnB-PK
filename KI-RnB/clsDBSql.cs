@@ -411,7 +411,8 @@ namespace KI_RnB
                 if (dt.Rows.Count == 1)
                 {
                     string str_no = dt.Rows[0][0].ToString();
-                    return int.Parse(str_no);
+                    int no; int.TryParse(str_no, out no);
+                    return no;
                 }
                 else
                 {
@@ -633,7 +634,8 @@ namespace KI_RnB
                 if (dt.Rows.Count == 1)
                 {
                     string str_no = dt.Rows[0][0].ToString();
-                    return int.Parse(str_no);
+                    int no; int.TryParse(str_no, out no);
+                    return no;
                 }
                 else
                 {

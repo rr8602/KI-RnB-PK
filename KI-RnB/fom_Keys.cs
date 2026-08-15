@@ -88,7 +88,7 @@ namespace KI_RnB
                     case "btn_D": break;    //(*)
                     case "btn_E": break;    //(/)
                     case "btn_F": break;    //(=)
-                    case "btn_G": keys = keys.Substring(0, keys.Length - 1); break;  //(<-)
+                    case "btn_G": if (keys.Length > 0) keys = keys.Substring(0, keys.Length - 1); break;  //(<-)
                     case "btn_H": keys = ""; break;  //(cls)
                 }
 

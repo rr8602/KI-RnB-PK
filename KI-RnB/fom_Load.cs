@@ -124,7 +124,7 @@ namespace KI_RnB
             cboF_RPM.Items.Add("Sort");
             cboF_RPM.Items.Add("Sort+3Average");
             cboF_RPM.Items.Add("Sort+5Average");
-            cboF_RPM.SelectedIndex = NI.Loss.RPM_Filt;
+            cboF_RPM.SelectedIndex = (NI.Loss.RPM_Filt >= 0 && NI.Loss.RPM_Filt < cboF_RPM.Items.Count) ? NI.Loss.RPM_Filt : 0;
 
             cboC_RPM.Items.Clear();
             cboC_RPM.Items.Add("5"); cboC_RPM.Items.Add("7"); cboC_RPM.Items.Add("9"); cboC_RPM.Items.Add("11"); cboC_RPM.Items.Add("13"); cboC_RPM.Items.Add("15");
@@ -136,7 +136,7 @@ namespace KI_RnB
             cboF_Acc.Items.Add("Sort");
             cboF_Acc.Items.Add("Sort+3Average");
             cboF_Acc.Items.Add("Sort+5Average");
-            cboF_Acc.SelectedIndex = NI.Loss.Acc_Filt;
+            cboF_Acc.SelectedIndex = (NI.Loss.Acc_Filt >= 0 && NI.Loss.Acc_Filt < cboF_Acc.Items.Count) ? NI.Loss.Acc_Filt : 0;
 
             cboC_Acc.Items.Clear();
             cboC_Acc.Items.Add("5"); cboC_Acc.Items.Add("7"); cboC_Acc.Items.Add("9"); cboC_Acc.Items.Add("11"); cboC_Acc.Items.Add("13"); cboC_Acc.Items.Add("15");
@@ -153,7 +153,7 @@ namespace KI_RnB
             cbo_Befo.Items.Add("7");
             cbo_Befo.Items.Add("8");
             cbo_Befo.Items.Add("9");
-            cbo_Befo.SelectedIndex = NI.Loss.Before_C;
+            cbo_Befo.SelectedIndex = (NI.Loss.Before_C >= 0 && NI.Loss.Before_C < cbo_Befo.Items.Count) ? NI.Loss.Before_C : 0;
 
             cbo_Aver.Items.Clear();
             cbo_Aver.Items.Add("1");
@@ -165,7 +165,7 @@ namespace KI_RnB
             cbo_Aver.Items.Add("7");
             cbo_Aver.Items.Add("8");
             cbo_Aver.Items.Add("9");
-            cbo_Aver.SelectedIndex = NI.Loss.kgf_Aver;
+            cbo_Aver.SelectedIndex = (NI.Loss.kgf_Aver >= 0 && NI.Loss.kgf_Aver < cbo_Aver.Items.Count) ? NI.Loss.kgf_Aver : 0;
 
             PSet.Cal_LoadRead();
             FL_Roll = PSet.Load_FL;
@@ -237,7 +237,7 @@ namespace KI_RnB
                 return;
             }
 
-            int MaxSpeed = Convert.ToInt16(Ret_Values(txtSpeed.Text) * 100 / 1.5);
+            int MaxSpeed = (int)(Ret_Values(txtSpeed.Text) * 100 / 1.5);
 
             if (!PLC.DO.MD__Ready) { MessageBox.Show(PSet.LangLoad[29]); return; } //"준비 모드로 전환"
             if (!PLC.DI.PBCalMode) { MessageBox.Show(PSet.LangLoad[30]); return; } //"교정 모드로 전환"
@@ -371,13 +371,15 @@ namespace KI_RnB
                     if (CalD != null)
                     {
                         string[] ArrD = CalD.Split(',');
+                        if (ArrD.Length < 6) continue;
+                        double dv;
 
-                        T_Data[CNT] = double.Parse(ArrD[0]);
-                        T_Sped[CNT] = double.Parse(ArrD[1]);
-                        T__RPM[CNT] = double.Parse(ArrD[2]);
-                        T__Kgf[CNT] = double.Parse(ArrD[3]);
-                        T_Indi[CNT] = double.Parse(ArrD[4]);
-                        T_Load[CNT] = double.Parse(ArrD[5]);
+                        T_Data[CNT] = double.TryParse(ArrD[0], out dv) ? dv : 0;
+                        T_Sped[CNT] = double.TryParse(ArrD[1], out dv) ? dv : 0;
+                        T__RPM[CNT] = double.TryParse(ArrD[2], out dv) ? dv : 0;
+                        T__Kgf[CNT] = double.TryParse(ArrD[3], out dv) ? dv : 0;
+                        T_Indi[CNT] = double.TryParse(ArrD[4], out dv) ? dv : 0;
+                        T_Load[CNT] = double.TryParse(ArrD[5], out dv) ? dv : 0;
 
                         comGraph.PlotChart(0, ref T_Data[CNT], ref T_Sped[CNT], 1);
                         comGraph.PlotChart(1, ref T_Data[CNT], ref T_Indi[CNT], 1);
@@ -457,9 +459,9 @@ namespace KI_RnB
         private void OrderFilter()
         {
             NI.Loss.RPM_Filt = cboF_RPM.SelectedIndex;
-            NI.Loss.RPM_Cunt = int.Parse(cboC_RPM.Items[cboC_RPM.SelectedIndex].ToString());
+            if (cboC_RPM.SelectedIndex >= 0) { int tmp; if (int.TryParse(cboC_RPM.Items[cboC_RPM.SelectedIndex].ToString(), out tmp)) NI.Loss.RPM_Cunt = tmp; }
             NI.Loss.Acc_Filt = cboF_Acc.SelectedIndex;
-            NI.Loss.Acc_Cunt = int.Parse(cboC_Acc.Items[cboC_Acc.SelectedIndex].ToString());
+            if (cboC_Acc.SelectedIndex >= 0) { int tmp; if (int.TryParse(cboC_Acc.Items[cboC_Acc.SelectedIndex].ToString(), out tmp)) NI.Loss.Acc_Cunt = tmp; }
 
             NI.Loss.Before_C = cbo_Befo.SelectedIndex;
             NI.Loss.kgf_Aver = cboC_Acc.SelectedIndex + 1;
@@ -637,9 +639,10 @@ namespace KI_RnB
             double Sel__Sum = 0;
             long SelCount = 0;
 
-            double Max_Sped = double.Parse(txtSpeed.Text);
-            double Stt_Sped = double.Parse(txtStart.Text);
-            double End_Sped = double.Parse(txt_Ends.Text);
+            double Max_Sped, Stt_Sped, End_Sped;
+            if (!double.TryParse(txtSpeed.Text, out Max_Sped)) return;
+            if (!double.TryParse(txtStart.Text, out Stt_Sped)) return;
+            if (!double.TryParse(txt_Ends.Text, out End_Sped)) return;
             double Stt_RPMs = 0;
             double End_RPMs = 0;
 

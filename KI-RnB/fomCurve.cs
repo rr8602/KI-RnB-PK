@@ -274,8 +274,8 @@ namespace KI_RnB
 
             try
             {
-                int time = int.Parse(txt_Time.Text); //04.측정 시간(sec)
-                int sped = int.Parse(txtSpeed.Text); //05.측정 속도(km/h)
+                //int sped = int.Parse(txtSpeed.Text); //05.측정 속도(km/h)
+                //int time = int.Parse(txt_Time.Text); //04.측정 시간(sec)
                 
                 if (chk_Item.Checked)
                 {
@@ -466,14 +466,18 @@ namespace KI_RnB
 
             try
             {
+                int crvTime, crvSpeed;
+                if (!int.TryParse(txt_Time.Text, out crvTime)) { MessageBoxEx.Show("Time 값이 올바르지 않습니다."); return; }
+                if (!int.TryParse(txtSpeed.Text, out crvSpeed)) { MessageBoxEx.Show("Speed 값이 올바르지 않습니다."); return; }
+
                 if (crv_Data.G_Data != null && crv_Data.G_Data.Count == Idx + 1)
                 {
                     crv_Data.G_Data.Add(new Curve_Data
                     {
                         Segment = txt_Segm.Text.ToUpper(),
-                        Time = int.Parse(txt_Time.Text),
-                        T_Time = int.Parse(txt_Time.Text),
-                        Speed = int.Parse(txtSpeed.Text),
+                        Time = crvTime,
+                        T_Time = crvTime,
+                        Speed = crvSpeed,
                         Items = txtItems.Text,
                         Vehicle = cbo_Vehi.Text,
                         Roll = cbo_Roll.Text,
@@ -485,9 +489,9 @@ namespace KI_RnB
                     crv_Data.G_Data.Insert(Idx, new Curve_Data
                     {
                         Segment = txt_Segm.Text.ToUpper(),
-                        Time = int.Parse(txt_Time.Text),
-                        T_Time = int.Parse(txt_Time.Text),
-                        Speed = int.Parse(txtSpeed.Text),
+                        Time = crvTime,
+                        T_Time = crvTime,
+                        Speed = crvSpeed,
                         Items = txtItems.Text,
                         Vehicle = cbo_Vehi.Text,
                         Roll = cbo_Roll.Text,

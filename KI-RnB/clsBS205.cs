@@ -156,7 +156,8 @@ namespace KI_RnB
                 if (str_B[0].Length < 4) { return; }
 
                 string sine_Val = data.Substring(2, 1);
-                float indi_Val = float.Parse(str_B[0]);
+                float indi_Val;
+                if (!float.TryParse(str_B[0], out indi_Val)) return;
 
                 Is_Onf = !Is_Onf;
 

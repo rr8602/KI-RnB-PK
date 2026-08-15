@@ -577,20 +577,17 @@ namespace KI_RnB
 
         public static string Ret_Balance(double Val1, double Val2)
         {
-            Single Ret_Val = Convert.ToSingle(Val1 / (Val1 + Val2)) * 100;
-
-            if (Val1 <= -1 || Val2 <= -1)
+            if (Val1 <= -1 || Val2 <= -1 || (Val1 + Val2) == 0)
             {
                 return "";
             }
-            else
-            {
-                return Ret_Val.ToString("#0.0");
-            }
+
+            Single Ret_Val = Convert.ToSingle(Val1 / (Val1 + Val2)) * 100;
+            return Ret_Val.ToString("#0.0");
         }
         public static double Dbl_Balance(double Val1, double Val2)
         {
-            if (Val1 == 0 || Val2 == 0) { return 0; }
+            if (Val1 == 0 || Val2 == 0 || (Val1 + Val2) == 0) { return 0; }
 
             double Ret_Val = (Val1 / (Val1 + Val2)) * 100;
 
@@ -598,7 +595,7 @@ namespace KI_RnB
         }
         public static double Dbl_Balance2(double Val2, double Val1)
         {
-            if (Val1 == 0 || Val2 == 0) { return 0; }
+            if (Val1 == 0 || Val2 == 0 || (Val1 + Val2) == 0) { return 0; }
 
             double Ret_Val = (Val1 / (Val1 + Val2)) * 100;
 
@@ -607,7 +604,7 @@ namespace KI_RnB
 
         public static Single DVD(Single Val1, Single Val2)
         {
-            if ((Val1 == 0) || (Val2 == 0)) 
+            if ((Val1 == 0) || (Val2 == 0))
             {
                 return 0;
             }
@@ -683,6 +680,8 @@ namespace KI_RnB
 
             if (sort.Count > cnt) { sort.Dequeue(); }
 
+            if (cnt < 3) return put;
+
             double[] Arr = new double[cnt];
 
             sort.CopyTo(Arr, 0); Array.Sort(Arr);
@@ -699,6 +698,8 @@ namespace KI_RnB
             sort.Enqueue(put);
 
             if (sort.Count > cnt) { sort.Dequeue(); }
+
+            if (cnt < 5) return put;
 
             double[] Arr = new double[cnt];
 

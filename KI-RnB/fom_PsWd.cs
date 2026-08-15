@@ -99,7 +99,7 @@ namespace KI_RnB
             }
             else
             {
-                NewValue = float.Parse(txt_Pswd.Text);
+                if (!float.TryParse(txt_Pswd.Text, out NewValue)) return;
                 this.Close();
             }
         }

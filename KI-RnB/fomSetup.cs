@@ -270,7 +270,7 @@ namespace KI_RnB
         {
             PSet.OnfSetup = true;
             
-            if (PSet.Onf_Stop) { main.Fom_Stop.Close(); }
+            if (PSet.Onf_Stop && main.Fom_Stop != null) { main.Fom_Stop.Close(); }
 
             this.Top = 0;
             this.Left = 0;
@@ -1084,28 +1084,29 @@ namespace KI_RnB
             PSet.Use_Door = cbo_Door.SelectedIndex;     //0:사용 않음, 1:사용
 
             PSet.OwnerDrv = cboM_Drv.SelectedIndex;     //Motor Drive
-            PSet.OwnerSpd = int.Parse(txtCSped.Text);   //Calibration Speed
-            PSet.OwnerToq = int.Parse(txtCTorq.Text);   //Parking     Torque
-            PSet.OwnerPBS = int.Parse(txtCPark.Text);   //Parking     Speed
+            int tmpI; float tmpF;
+            PSet.OwnerSpd = int.TryParse(txtCSped.Text, out tmpI) ? tmpI : PSet.OwnerSpd;
+            PSet.OwnerToq = int.TryParse(txtCTorq.Text, out tmpI) ? tmpI : PSet.OwnerToq;
+            PSet.OwnerPBS = int.TryParse(txtCPark.Text, out tmpI) ? tmpI : PSet.OwnerPBS;
 
-            PSet.OwnerSFL = float.Parse(txtWSS_0.Text); //WSS Speed FL (km/h)
-            PSet.OwnerSFR = float.Parse(txtWSS_1.Text); //WSS Speed FR (km/h)
-            PSet.OwnerSRL = float.Parse(txtWSS_2.Text); //WSS Speed RL (km/h)
-            PSet.OwnerSRR = float.Parse(txtWSS_3.Text); //WSS Speed RR (km/h)
+            PSet.OwnerSFL = float.TryParse(txtWSS_0.Text, out tmpF) ? tmpF : PSet.OwnerSFL;
+            PSet.OwnerSFR = float.TryParse(txtWSS_1.Text, out tmpF) ? tmpF : PSet.OwnerSFR;
+            PSet.OwnerSRL = float.TryParse(txtWSS_2.Text, out tmpF) ? tmpF : PSet.OwnerSRL;
+            PSet.OwnerSRR = float.TryParse(txtWSS_3.Text, out tmpF) ? tmpF : PSet.OwnerSRR;
 
-            PSet.Owner_FL = int.Parse(txtWSSFL.Text);   //WSS Speed FL (RPM)
-            PSet.Owner_FR = int.Parse(txtWSSFR.Text);   //WSS Speed FR (RPM)
-            PSet.Owner_RL = int.Parse(txtWSSRL.Text);   //WSS Speed RL (RPM)
-            PSet.Owner_RR = int.Parse(txtWSSRR.Text);   //WSS Speed RR (RPM)
+            PSet.Owner_FL = int.TryParse(txtWSSFL.Text, out tmpI) ? tmpI : PSet.Owner_FL;
+            PSet.Owner_FR = int.TryParse(txtWSSFR.Text, out tmpI) ? tmpI : PSet.Owner_FR;
+            PSet.Owner_RL = int.TryParse(txtWSSRL.Text, out tmpI) ? tmpI : PSet.Owner_RL;
+            PSet.Owner_RR = int.TryParse(txtWSSRR.Text, out tmpI) ? tmpI : PSet.Owner_RR;
 
-            PSet.PLC_GapT = int.Parse(txt_GapT.Text);
-            PSet.CNT_Stop = int.Parse(txtS_CNT.Text);
+            PSet.PLC_GapT = int.TryParse(txt_GapT.Text, out tmpI) ? tmpI : PSet.PLC_GapT;
+            PSet.CNT_Stop = int.TryParse(txtS_CNT.Text, out tmpI) ? tmpI : PSet.CNT_Stop;
 
             PSet.OwnerPdl = cboPedal.SelectedIndex;     //Pedal Brake
             PSet.OwnerCrv = cbo_File.SelectedIndex;     //드라이브 커브 파일 서렁
 
-            PSet.Print__X = int.Parse(txt_XPos.Text);   //보고서 X Offset
-            PSet.Print__Y = int.Parse(txt_YPos.Text);   //보고서 Y Offset
+            PSet.Print__X = int.TryParse(txt_XPos.Text, out tmpI) ? tmpI : (int)PSet.Print__X;
+            PSet.Print__Y = int.TryParse(txt_YPos.Text, out tmpI) ? tmpI : (int)PSet.Print__Y;
             #endregion
             
             PSet.Prog_SetMake();
@@ -1132,9 +1133,9 @@ namespace KI_RnB
         {
             try
             {
-                if (pVal == "") return 0;
-
-                return Convert.ToInt16(pVal);
+                int val;
+                if (!int.TryParse(pVal, out val)) return 0;
+                return val;
             }
             catch
             {

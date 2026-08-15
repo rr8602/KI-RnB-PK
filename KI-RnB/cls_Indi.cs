@@ -111,7 +111,8 @@ namespace KI_RnB
             if (data.Length == 14)
             {
                 string str_Gets = data.Substring(3, 9);
-                double indi_Val = double.Parse(str_Gets);
+                double indi_Val;
+                if (!double.TryParse(str_Gets, out indi_Val)) return;
                 
                 TSet.Bongshin = H2Y.QSort_Filter(5, indi_Val, Q_Sort);
 

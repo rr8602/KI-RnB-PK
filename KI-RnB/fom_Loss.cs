@@ -277,7 +277,7 @@ namespace KI_RnB
 
             Ask_Save = true;
 
-            int MaxSpeed = Convert.ToInt16(Ret_Values(txtSpeed.Text) * 100 / 1.5);
+            int MaxSpeed = (int)(Ret_Values(txtSpeed.Text) * 100 / 1.5);
             bool Start_On = false;
 
             lbl_FL_T.BackColor = Color.White; lbl_FL_T.Text = "--";
@@ -417,22 +417,24 @@ namespace KI_RnB
                     if (CalD != null)
                     {
                         string[] ArrD = CalD.Split(',');
+                        if (ArrD.Length < 13) continue;
+                        double dv;
 
-                        T_Data[CNT] = double.Parse(ArrD[0]);
-                        FLSped[CNT] = double.Parse(ArrD[1]);
-                        FRSped[CNT] = double.Parse(ArrD[2]);
-                        RLSped[CNT] = double.Parse(ArrD[3]);
-                        RRSped[CNT] = double.Parse(ArrD[4]);
+                        T_Data[CNT] = double.TryParse(ArrD[0], out dv) ? dv : 0;
+                        FLSped[CNT] = double.TryParse(ArrD[1], out dv) ? dv : 0;
+                        FRSped[CNT] = double.TryParse(ArrD[2], out dv) ? dv : 0;
+                        RLSped[CNT] = double.TryParse(ArrD[3], out dv) ? dv : 0;
+                        RRSped[CNT] = double.TryParse(ArrD[4], out dv) ? dv : 0;
 
-                        FL_RPM[CNT] = double.Parse(ArrD[5]);
-                        FR_RPM[CNT] = double.Parse(ArrD[6]);
-                        RL_RPM[CNT] = double.Parse(ArrD[7]);
-                        RR_RPM[CNT] = double.Parse(ArrD[8]);
+                        FL_RPM[CNT] = double.TryParse(ArrD[5], out dv) ? dv : 0;
+                        FR_RPM[CNT] = double.TryParse(ArrD[6], out dv) ? dv : 0;
+                        RL_RPM[CNT] = double.TryParse(ArrD[7], out dv) ? dv : 0;
+                        RR_RPM[CNT] = double.TryParse(ArrD[8], out dv) ? dv : 0;
 
-                        FL_Kgf[CNT] = double.Parse(ArrD[9]);
-                        FR_Kgf[CNT] = double.Parse(ArrD[10]);
-                        RL_Kgf[CNT] = double.Parse(ArrD[11]);
-                        RR_Kgf[CNT] = double.Parse(ArrD[12]);
+                        FL_Kgf[CNT] = double.TryParse(ArrD[9], out dv) ? dv : 0;
+                        FR_Kgf[CNT] = double.TryParse(ArrD[10], out dv) ? dv : 0;
+                        RL_Kgf[CNT] = double.TryParse(ArrD[11], out dv) ? dv : 0;
+                        RR_Kgf[CNT] = double.TryParse(ArrD[12], out dv) ? dv : 0;
 
                         switch (cboYAxle.SelectedIndex)
                         {
@@ -508,9 +510,9 @@ namespace KI_RnB
         private void OrderFilter()
         {
             NI.Loss.RPM_Filt = cboF_RPM.SelectedIndex;
-            NI.Loss.RPM_Cunt = int.Parse(cboC_RPM.Items[cboC_RPM.SelectedIndex].ToString());
+            if (cboC_RPM.SelectedIndex >= 0) { int tmp; if (int.TryParse(cboC_RPM.Items[cboC_RPM.SelectedIndex].ToString(), out tmp)) NI.Loss.RPM_Cunt = tmp; }
             NI.Loss.Acc_Filt = cboF_Acc.SelectedIndex;
-            NI.Loss.Acc_Cunt = int.Parse(cboC_Acc.Items[cboC_Acc.SelectedIndex].ToString()); 
+            if (cboC_Acc.SelectedIndex >= 0) { int tmp; if (int.TryParse(cboC_Acc.Items[cboC_Acc.SelectedIndex].ToString(), out tmp)) NI.Loss.Acc_Cunt = tmp; } 
         }
         private void Order_Excel()
         {
@@ -752,9 +754,10 @@ namespace KI_RnB
             double FL__Time = 0, FR__Time = 0, RL__Time = 0, RR__Time = 0;
             double FreeOfst = 0;
 
-            double Max_Sped = double.Parse(txtSpeed.Text);
-            double Stt_Sped = double.Parse(txtStart.Text);
-            double End_Sped = double.Parse(txt_Ends.Text);
+            double Max_Sped, Stt_Sped, End_Sped;
+            if (!double.TryParse(txtSpeed.Text, out Max_Sped)) return;
+            if (!double.TryParse(txtStart.Text, out Stt_Sped)) return;
+            if (!double.TryParse(txt_Ends.Text, out End_Sped)) return;
             int Idx = cboIndex.SelectedIndex;
 
             long OfstTick = DateTime.Now.Ticks;
@@ -1640,17 +1643,19 @@ namespace KI_RnB
         private Loss_Items Kind_LogLoss(string pLoss)
         {
             string[] columns = pLoss.Split('$');
+            if (columns.Length < 8) return new Loss_Items();
+            double dv;
 
             Loss_Items member = new Loss_Items()
             {
-                SpdS = double.Parse(columns[0]),
-                SpdE = double.Parse(columns[1]),
-                RpmS = double.Parse(columns[2]),
-                RpmE = double.Parse(columns[3]),
-                Time = double.Parse(columns[4]),
-                ChkM = double.Parse(columns[5]),
-                ChkB = double.Parse(columns[6]),
-                Loss = double.Parse(columns[7])
+                SpdS = double.TryParse(columns[0], out dv) ? dv : 0,
+                SpdE = double.TryParse(columns[1], out dv) ? dv : 0,
+                RpmS = double.TryParse(columns[2], out dv) ? dv : 0,
+                RpmE = double.TryParse(columns[3], out dv) ? dv : 0,
+                Time = double.TryParse(columns[4], out dv) ? dv : 0,
+                ChkM = double.TryParse(columns[5], out dv) ? dv : 0,
+                ChkB = double.TryParse(columns[6], out dv) ? dv : 0,
+                Loss = double.TryParse(columns[7], out dv) ? dv : 0
             };
 
             return member;
