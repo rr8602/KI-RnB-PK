@@ -493,8 +493,8 @@ namespace KI_RnB
     public struct tblModel
     {
         public MDB_Sql MDB;
-        const string strModel = "dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam ";
-        const string str_List = "            dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam ";
+        const string strModel = "dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam, dbBalance ";
+        const string str_List = "            dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam, dbBalance ";
         
         #region Model DB Table - Methods
         public string dbCarIndex { get; set; }  //Model Number
@@ -508,6 +508,7 @@ namespace KI_RnB
         public string dbCarDrive { get; set; }  //Drive Mode
         public string dbCarWbase { get; set; }  //Wheelbase Length
         public string dbCarParam { get; set; }  //Parameter
+        public string dbBalance { get; set; }   //Balance Y/N
         #endregion
 
         #region Model DB Table - Functions
@@ -524,6 +525,7 @@ namespace KI_RnB
             dbCarDrive = "";
             dbCarWbase = "";
             dbCarParam = "";
+            dbBalance = "N";
         }
 
         public DataTable Search()
@@ -553,6 +555,7 @@ namespace KI_RnB
                 dbCarDrive = dt.Rows[0]["dbCarDrive"].ToString();
                 dbCarWbase = dt.Rows[0]["dbCarWbase"].ToString();
                 dbCarParam = dt.Rows[0]["dbCarParam"].ToString();
+                dbBalance = dt.Rows[0]["dbBalance"].ToString();
             }
 
             return dbCarModel;
@@ -577,6 +580,7 @@ namespace KI_RnB
                 dbCarDrive = dt.Rows[0]["dbCarDrive"].ToString();
                 dbCarWbase = dt.Rows[0]["dbCarWbase"].ToString();
                 dbCarParam = dt.Rows[0]["dbCarParam"].ToString();
+                dbBalance = dt.Rows[0]["dbBalance"].ToString();
             }
 
             return dt.Rows.Count;
@@ -601,6 +605,7 @@ namespace KI_RnB
                 dbCarDrive = dt.Rows[0]["dbCarDrive"].ToString();
                 dbCarWbase = dt.Rows[0]["dbCarWbase"].ToString();
                 dbCarParam = dt.Rows[0]["dbCarParam"].ToString();
+                dbBalance = dt.Rows[0]["dbBalance"].ToString();
             }
 
             return dt.Rows.Count;
@@ -626,6 +631,7 @@ namespace KI_RnB
                 dbCarDrive = dt.Rows[0]["dbCarDrive"].ToString();
                 dbCarWbase = dt.Rows[0]["dbCarWbase"].ToString();
                 dbCarParam = dt.Rows[0]["dbCarParam"].ToString();
+                dbBalance = dt.Rows[0]["dbBalance"].ToString();
             }
 
             return dt.Rows.Count;
@@ -659,7 +665,7 @@ namespace KI_RnB
         {
             string sql = "INSERT INTO tbl_CarModel ( " + strModel + " ) values (";
                    sql += string.Format(H2Y.Sql_Insert(strModel) + ") ",
-                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam);
+                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam, dbBalance);
 
                    MDB.Execute(sql);
         }
@@ -667,7 +673,7 @@ namespace KI_RnB
         public void Update(string pModel)
         {
             string sql = string.Format("UPDATE tbl_CarModel SET " + H2Y.Sql_Update(strModel),
-                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam);
+                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam, dbBalance);
                    sql+= string.Format("WHERE dbCarModel='{0}'", pModel);
 
                    MDB.Execute(sql);
@@ -675,7 +681,7 @@ namespace KI_RnB
         public void Update(int pIndex)
         {
             string sql = string.Format("UPDATE tbl_CarModel SET " + H2Y.Sql_Update(strModel),
-                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam);
+                                dbCarIndex, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbCarParam, dbBalance);
                    sql += string.Format("WHERE dbCarIndex='{0}'", pIndex);
 
             MDB.Execute(sql);

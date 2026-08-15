@@ -585,6 +585,8 @@ namespace KI_RnB
                 if (carWbase == PLC.OfSetL + PLC.Dist_I) SelWBase = "9";
                 if (carWbase == PLC.OfSetL + PLC.Dist_J) SelWBase = "10";
 
+                PLC.DO.Vehicle_Balance = DB_All.DBModel.dbBalance.ToUpper() == "Y";
+
                 PLC.DO.Vehicle01 = false;
                 PLC.DO.Vehicle02 = false;
                 PLC.DO.Vehicle03 = false;

@@ -1399,6 +1399,7 @@ namespace KI_RnB
             main.DB_All.DBModel.dbCarDrive = cboDrive.Text;
             main.DB_All.DBModel.dbCarWbase = cboWBase.Text;
             main.DB_All.DBModel.dbCarParam = cboParam.Text;
+            main.DB_All.DBModel.dbBalance = chk_balance.Checked ? "Y" : "N";
             main.DB_All.DBModel.Insert();
 
             AllModelList();
@@ -1420,6 +1421,7 @@ namespace KI_RnB
                 main.DB_All.DBModel.dbCarDrive = cboDrive.Text;
                 main.DB_All.DBModel.dbCarWbase = cboWBase.Text;
                 main.DB_All.DBModel.dbCarParam = cboParam.Text;
+                main.DB_All.DBModel.dbBalance = chk_balance.Checked ? "Y" : "N";
 
                 main.DB_All.DBModel.Update(pModel);
             }
@@ -1484,6 +1486,7 @@ namespace KI_RnB
                 cboDrive.Text = dgvModel[7, idx].Value.ToString();
                 cboWBase.Text = dgvModel[8, idx].Value.ToString();
                 cboParam.Text = dgvModel[9, idx].Value.ToString();
+                chk_balance.Checked = dgvModel[10, idx].Value.ToString().ToUpper() == "Y";
             }
             catch (Exception ex)
             {

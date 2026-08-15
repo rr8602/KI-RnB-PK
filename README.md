@@ -97,14 +97,40 @@
 
 ---
 
-### 3. 기타 수정
+### 3. ⚡ 신규 기능: Vehicle Balance PLC 출력
+
+차량 모델별 Balance 검사 여부(Y/N)를 DB에서 관리하고, 검사 시작 시 PLC에 자동 전송하는 기능 추가.
+
+#### 데이터 흐름
+
+```
+[DB] tbl_CarModel.dbBalance ("Y"/"N")
+  ↕ [UI] fomSetup → chk_balance 체크박스로 설정/조회
+  ↓ [fom_Main] 모델 선택 시 DB에서 읽어서
+  ↓ [PLC] PLC.DO.Vehicle_Balance → D562[13] 신호로 PLC에 전송
+          (W/B Select 신호 D562[0~9]와 동시 전송)
+```
+
+#### 수정 파일
+
+| 파일 | 내용 |
+|------|------|
+| clsDBSql.cs | `dbBalance` 프로퍼티 추가, strModel/str_List/Init/조회 4개/Insert/Update에 반영 |
+| fomSetup.cs | SelectModel에서 chk_balance 표시, Add/Edit에서 dbBalance 저장 |
+| fom_Main.cs | Sel_Vehicles에서 `PLC.DO.Vehicle_Balance` 설정 후 `PLC_Put_D562()`로 전송 |
+| cls_PLCs.cs | `Vehicle_Balance` 프로퍼티 (D562[13]), PLC_562_Mapp 매핑 (기 구현) |
+| fomSetup.Designer.cs | `chk_balance` CheckBox 컨트롤 (기 구현) |
+
+---
+
+### 4. 기타 수정
 - **cboModel 드롭다운**: PLC Select 처리 시 `!cboModel.DroppedDown` 체크 추가
 - **fomCurve 타이틀**: 새 커브 생성 시 타이틀바에 모델명 표시
 - **icsNeoClass**: ConvertFromHex catch 타입 OverflowException 유지
 
 ---
 
-### 4. 사이드 이펙트 검증
+### 5. 사이드 이펙트 검증
 
 | 항목 | 결과 |
 |------|------|
@@ -120,7 +146,7 @@
 
 ---
 
-### 5. 현장 확인 필요 사항
+### 6. 현장 확인 필요 사항
 
 | # | 항목 | 확인 방법 |
 |---|------|-----------|
