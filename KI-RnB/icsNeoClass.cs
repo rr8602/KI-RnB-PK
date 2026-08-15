@@ -1612,9 +1612,9 @@ namespace KI_RnB
                 // Convert hex string to unsigned Int32eger
                 uiHex = System.Convert.ToUInt32(num, 16);
             }
-            catch (System.OverflowException)
+            catch (System.OverflowException ex)
             {
-                //
+                Logs.MakeLog_File(Log_His.Err_, "ConvertFromHex: " + ex.Message);
             }
             return Convert.ToInt32(uiHex);
         }

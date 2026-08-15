@@ -50,6 +50,7 @@ namespace KI_RnB
 
         private void cboModel_Click(object sender, EventArgs e)
         {
+            if (cboModel.SelectedItem == null) return;
             strModel = cboModel.SelectedItem.ToString();
         }
 
@@ -166,6 +167,7 @@ namespace KI_RnB
 
         private void Data__Search()
         {
+            if (cboModel.SelectedItem == null) return;
             strModel = cboModel.SelectedItem.ToString();
             idx_Find = cbo_Days.SelectedIndex;
 

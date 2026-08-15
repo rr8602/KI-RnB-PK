@@ -62,6 +62,7 @@ namespace KI_RnB
         public DataSet DS_Select(string pSql)
         {
             DataSet ds = new DataSet();
+            if (DBs_Conn == null) return ds;
 
             using (OleDbDataAdapter adapter = new OleDbDataAdapter(pSql, DBs_Conn))
             {
@@ -87,6 +88,7 @@ namespace KI_RnB
         public DataTable DT_Select(string pSql)
         {
             DataTable dt = new DataTable();
+            if (DBs_Conn == null) return dt;
 
             using (OleDbDataAdapter adapter = new OleDbDataAdapter(pSql, DBs_Conn))
             {
@@ -110,6 +112,8 @@ namespace KI_RnB
         /// <param name="pSql">실행 sql</param>
         public void Execute(string pSql)
         {
+            if (DBs_Conn == null) return;
+
             using (OleDbCommand cmd = new OleDbCommand(pSql, DBs_Conn))
             {
                 try
@@ -138,6 +142,8 @@ namespace KI_RnB
         /// <param name="pSql"></param>
         public void Create(string pSql)
         {
+            if (DBs_Conn == null) return;
+
             using (OleDbCommand cmd = new OleDbCommand(pSql, DBs_Conn))
             {
                 //OleDbTransaction trans = DBs_Conn.BeginTransaction();
@@ -149,6 +155,7 @@ namespace KI_RnB
                 }
                 catch (Exception ex)
                 {
+                    Logs.MakeLog_File(Log_His.Err_, "Create: " + ex.Message);
                 }
                 //trans.Commit();
                 //trans = null;

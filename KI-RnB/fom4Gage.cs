@@ -110,6 +110,7 @@ namespace KI_RnB
             }
             catch(Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Speeds_Panel: " + ex.Message);
             }
         }
 

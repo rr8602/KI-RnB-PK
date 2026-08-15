@@ -295,17 +295,19 @@ namespace KI_RnB
                             B_Cnt = 0;
 
                             Main.ABSBScanHerz(BHerz.ToString());
-                            if (BHerz == 0)
+                            if (BHerz == 0 && Main.IsHandleCreated)
                             {
-                                Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red;
+                                Main.BeginInvoke(new Action(() => { Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red; }));
                             }
                         }
                     }
                 }
                 return;
             }
-            catch (Exception e)
-            { }
+            catch (Exception ex)
+            {
+                Logs.MakeLog_File(Log_His.Err_, "ThreadABSB: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -336,10 +338,10 @@ namespace KI_RnB
                 return true;
             }
             catch (Exception e)
-            { 
-                Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red;
+            {
+                if (Main.IsHandleCreated) Main.BeginInvoke(new Action(() => { Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red; }));
             }
-            
+
             return false;
         }
         public void Call_Request()
@@ -435,9 +437,9 @@ namespace KI_RnB
                 System.Drawing.Color yellow = System.Drawing.Color.Yellow;
 
                 B_Cnt++;
-                if (B_Cnt % 5 == 0)
+                if (B_Cnt % 5 == 0 && Main.IsHandleCreated)
                 {
-                    Main.lbl_Ctrl.ForeColor = (Main.lbl_Ctrl.ForeColor == black ? yellow : black);
+                    Main.BeginInvoke(new Action(() => { Main.lbl_Ctrl.ForeColor = (Main.lbl_Ctrl.ForeColor == black ? yellow : black); }));
                 }
 
                 add_Buff = "";
@@ -446,7 +448,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
-                Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red;
+                if (Main.IsHandleCreated) Main.BeginInvoke(new Action(() => { Main.lbl_Ctrl.ForeColor = System.Drawing.Color.Red; }));
                 return false;
             }
         }

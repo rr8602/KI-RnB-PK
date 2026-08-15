@@ -1175,7 +1175,7 @@ namespace KI_RnB
             {
                 txt_Pswd.Text = PSet.Passwd.ToString(); //Password
                 txtCal_C.Text = PSet.CalCyc.ToString(); //Calibration Cycle
-                cboPrint.SelectedIndex = PSet.sPrint;   //Print Mode
+                if (PSet.sPrint >= 0 && PSet.sPrint < cboPrint.Items.Count) cboPrint.SelectedIndex = PSet.sPrint;   //Print Mode
 
                 #region Wheelbase distance
                 txt_WMin.Text = PSet.WB_Min.ToString(); //Wheelbase Min.
@@ -1236,26 +1236,26 @@ namespace KI_RnB
                 #endregion
 
                 #region Owner Setting
-                cbo_Lang.SelectedIndex = PSet.OwnerS00;     //언어 선택
-                cbo_Own1.SelectedIndex = PSet.OwnerS01;     //기준 속도 설정
-                cbo_Own2.SelectedIndex = PSet.OwnerS02;     //끌림 수식 설정
-                cbo_Own3.SelectedIndex = PSet.OwnerS03;     //RED(시리얼번호) 사용 설정
+                if (PSet.OwnerS00 >= 0 && PSet.OwnerS00 < cbo_Lang.Items.Count) cbo_Lang.SelectedIndex = PSet.OwnerS00;     //언어 선택
+                if (PSet.OwnerS01 >= 0 && PSet.OwnerS01 < cbo_Own1.Items.Count) cbo_Own1.SelectedIndex = PSet.OwnerS01;     //기준 속도 설정
+                if (PSet.OwnerS02 >= 0 && PSet.OwnerS02 < cbo_Own2.Items.Count) cbo_Own2.SelectedIndex = PSet.OwnerS02;     //끌림 수식 설정
+                if (PSet.OwnerS03 >= 0 && PSet.OwnerS03 < cbo_Own3.Items.Count) cbo_Own3.SelectedIndex = PSet.OwnerS03;     //RED(시리얼번호) 사용 설정
                 txt_Own4.Text = PSet.OwnerS04.ToString();   //RED(시리얼번호)
 
-                cbo_Own5.SelectedIndex = PSet.OwnerS05;     //Drag Judge
-                cbo_Own6.SelectedIndex = PSet.OwnerS06;     //Brake Judge
-                cbo_Own7.SelectedIndex = PSet.OwnerS07;     //Parking Judge
-                cbo_Own8.SelectedIndex = PSet.OwnerS08;     //Speedometer Judge
-                cbo_Own9.SelectedIndex = PSet.OwnerS09;     //Balance Judge
-                cbo_OwnA.SelectedIndex = PSet.OwnerS0A;     //WSS Judge
-                cbo_OwnB.SelectedIndex = PSet.OwnerS0B;     //Decrease Judge
-                cbo_OwnC.SelectedIndex = PSet.OwnerS0C;     //Increase Judge
+                if (PSet.OwnerS05 >= 0 && PSet.OwnerS05 < cbo_Own5.Items.Count) cbo_Own5.SelectedIndex = PSet.OwnerS05;     //Drag Judge
+                if (PSet.OwnerS06 >= 0 && PSet.OwnerS06 < cbo_Own6.Items.Count) cbo_Own6.SelectedIndex = PSet.OwnerS06;     //Brake Judge
+                if (PSet.OwnerS07 >= 0 && PSet.OwnerS07 < cbo_Own7.Items.Count) cbo_Own7.SelectedIndex = PSet.OwnerS07;     //Parking Judge
+                if (PSet.OwnerS08 >= 0 && PSet.OwnerS08 < cbo_Own8.Items.Count) cbo_Own8.SelectedIndex = PSet.OwnerS08;     //Speedometer Judge
+                if (PSet.OwnerS09 >= 0 && PSet.OwnerS09 < cbo_Own9.Items.Count) cbo_Own9.SelectedIndex = PSet.OwnerS09;     //Balance Judge
+                if (PSet.OwnerS0A >= 0 && PSet.OwnerS0A < cbo_OwnA.Items.Count) cbo_OwnA.SelectedIndex = PSet.OwnerS0A;     //WSS Judge
+                if (PSet.OwnerS0B >= 0 && PSet.OwnerS0B < cbo_OwnB.Items.Count) cbo_OwnB.SelectedIndex = PSet.OwnerS0B;     //Decrease Judge
+                if (PSet.OwnerS0C >= 0 && PSet.OwnerS0C < cbo_OwnC.Items.Count) cbo_OwnC.SelectedIndex = PSet.OwnerS0C;     //Increase Judge
 
-                cbo__SST.SelectedIndex = PSet.SST_Type;     //0:측정 않음, 1:막대 그래프, 2:숫자만
-                cbo__Brk.SelectedIndex = PSet.Brk_Type;     //0:측정 않음, 1:측정
-                cbo_Door.SelectedIndex = PSet.Use_Door;     //0:사용 않음, 1:사용
+                if (PSet.SST_Type >= 0 && PSet.SST_Type < cbo__SST.Items.Count) cbo__SST.SelectedIndex = PSet.SST_Type;     //0:측정 않음, 1:막대 그래프, 2:숫자만
+                if (PSet.Brk_Type >= 0 && PSet.Brk_Type < cbo__Brk.Items.Count) cbo__Brk.SelectedIndex = PSet.Brk_Type;     //0:측정 않음, 1:측정
+                if (PSet.Use_Door >= 0 && PSet.Use_Door < cbo_Door.Items.Count) cbo_Door.SelectedIndex = PSet.Use_Door;     //0:사용 않음, 1:사용
 
-                cboM_Drv.SelectedIndex = PSet.OwnerDrv;     //Motor Drive
+                if (PSet.OwnerDrv >= 0 && PSet.OwnerDrv < cboM_Drv.Items.Count) cboM_Drv.SelectedIndex = PSet.OwnerDrv;     //Motor Drive
                 txtCSped.Text = PSet.OwnerSpd.ToString();   //Calibration Speed
                 txtCTorq.Text = PSet.OwnerToq.ToString();   //Parking     Torque
                 txtCPark.Text = PSet.OwnerPBS.ToString();   //Parking     Speed
@@ -1270,8 +1270,8 @@ namespace KI_RnB
                 txtWSSRL.Text = PSet.Owner_RL.ToString();   //WSS Speed RL (RPM)
                 txtWSSRR.Text = PSet.Owner_RR.ToString();   //WSS Speed RR (RPM)
 
-                cboPedal.SelectedIndex = PSet.OwnerPdl;     //Pedal Brake
-                cbo_File.SelectedIndex = PSet.OwnerCrv;     //드라이브 커브 파일 선택
+                if (PSet.OwnerPdl >= 0 && PSet.OwnerPdl < cboPedal.Items.Count) cboPedal.SelectedIndex = PSet.OwnerPdl;     //Pedal Brake
+                if (PSet.OwnerCrv >= 0 && PSet.OwnerCrv < cbo_File.Items.Count) cbo_File.SelectedIndex = PSet.OwnerCrv;     //드라이브 커브 파일 선택
 
                 txt_XPos.Text = PSet.Print__X.ToString();   //보고서 X Offset
                 txt_YPos.Text = PSet.Print__Y.ToString();   //보고서 Y Offset
@@ -1454,6 +1454,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "dgvModel_CellClick: " + ex.Message);
             }
         }
         private void dgvModel_CurrentCellChanged(object sender, EventArgs e)
@@ -1466,6 +1467,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "dgvModel_CurrentCellChanged: " + ex.Message);
             }
         }
         private void SelectModel(int idx)
@@ -1485,7 +1487,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
-
+                Logs.MakeLog_File(Log_His.Err_, "SelectModel: " + ex.Message);
             }
         }
 

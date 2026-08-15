@@ -715,6 +715,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Ret_LabelSet: " + ex.Message);
             }
         }
 
@@ -1060,7 +1061,7 @@ namespace KI_RnB
         }
         private void lst_Step_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TSet.Simul_No = lst_Step.SelectedIndex;
+            if (lst_Step.SelectedIndex >= 0) TSet.Simul_No = lst_Step.SelectedIndex;
         }
         private void btnSimul_Click(object sender, EventArgs e)
         {
@@ -1081,23 +1082,25 @@ namespace KI_RnB
 
         private void Order___Drag()
         {
-            TSet.VirtualL_B = Convert.ToSingle(txtLDrag.Text);
-            TSet.VirtualR_B = Convert.ToSingle(txtRDrag.Text);
+            float tmpVal;
+            if (float.TryParse(txtLDrag.Text, out tmpVal)) TSet.VirtualL_B = tmpVal;
+            if (float.TryParse(txtRDrag.Text, out tmpVal)) TSet.VirtualR_B = tmpVal;
         }
 
         private void Order__Apend()
         {
-            TSet.Virtual_FL = Convert.ToSingle(txt_W_FL.Text);
-            TSet.Virtual_FR = Convert.ToSingle(txt_W_FR.Text);
-            TSet.Virtual_RL = Convert.ToSingle(txt_W_RL.Text);
-            TSet.Virtual_RR = Convert.ToSingle(txt_W_RR.Text);
-            TSet.VirtualRPM = Convert.ToSingle(txt__RPM.Text);
-            TSet.VirtualPTS = Convert.ToSingle(txt__PTS.Text);
-            TSet.VirtualSST = Convert.ToSingle(txt__SST.Text);
-            TSet.VirtualL_W = Convert.ToSingle(txtL_Wgt.Text);
-            TSet.VirtualR_W = Convert.ToSingle(txtR_Wgt.Text);
-            TSet.VirtualL_B = Convert.ToSingle(txtL_Brk.Text);
-            TSet.VirtualR_B = Convert.ToSingle(txtR_Brk.Text);
+            float tmpVal;
+            if (float.TryParse(txt_W_FL.Text, out tmpVal)) TSet.Virtual_FL = tmpVal;
+            if (float.TryParse(txt_W_FR.Text, out tmpVal)) TSet.Virtual_FR = tmpVal;
+            if (float.TryParse(txt_W_RL.Text, out tmpVal)) TSet.Virtual_RL = tmpVal;
+            if (float.TryParse(txt_W_RR.Text, out tmpVal)) TSet.Virtual_RR = tmpVal;
+            if (float.TryParse(txt__RPM.Text, out tmpVal)) TSet.VirtualRPM = tmpVal;
+            if (float.TryParse(txt__PTS.Text, out tmpVal)) TSet.VirtualPTS = tmpVal;
+            if (float.TryParse(txt__SST.Text, out tmpVal)) TSet.VirtualSST = tmpVal;
+            if (float.TryParse(txtL_Wgt.Text, out tmpVal)) TSet.VirtualL_W = tmpVal;
+            if (float.TryParse(txtR_Wgt.Text, out tmpVal)) TSet.VirtualR_W = tmpVal;
+            if (float.TryParse(txtL_Brk.Text, out tmpVal)) TSet.VirtualL_B = tmpVal;
+            if (float.TryParse(txtR_Brk.Text, out tmpVal)) TSet.VirtualR_B = tmpVal;
         }
         
         private void Order__Start()
@@ -1148,16 +1151,22 @@ namespace KI_RnB
         
         private Double ConvertSpeed(string pVal)
         {
-            Double DiaM = Convert.ToSingle(txt_DiaM.Text);
-            Double MinM = (DiaM * Math.PI) * Convert.ToSingle(pVal);
+            float fDiaM, fVal;
+            if (!float.TryParse(txt_DiaM.Text, out fDiaM)) return 0;
+            if (!float.TryParse(pVal, out fVal)) return 0;
+            Double DiaM = fDiaM;
+            Double MinM = (DiaM * Math.PI) * fVal;
             Double Sped = H2Y.DVD(H2Y.DVD(MinM * 60, 1000), 1000);
 
             return Sped;
         }
         private Double Convert_RPMs(string pVal)
         {
-            Double DiaM = Convert.ToSingle(txt_DiaM.Text);
-            Double Sped = H2Y.DVD(Convert.ToSingle(pVal) * 1000 * 1000, 60);
+            float fDiaM, fVal;
+            if (!float.TryParse(txt_DiaM.Text, out fDiaM)) return 0;
+            if (!float.TryParse(pVal, out fVal)) return 0;
+            Double DiaM = fDiaM;
+            Double Sped = H2Y.DVD(fVal * 1000 * 1000, 60);
             Double RPMs = H2Y.DVD(Sped, (DiaM * Math.PI));
 
             return RPMs;
@@ -1611,7 +1620,7 @@ namespace KI_RnB
                 case "btnECU06": ECUs.Clear_DTC(); break;
                 case "btnECU07": ECUs.Check_Signals(); break;
                 case "btnECU08": ECUs.WSS_Test(); break;
-                case "btnECU09": ECUs.Dynamic_Step(cboIndex.SelectedIndex + 1); break;
+                case "btnECU09": if (cboIndex.SelectedIndex >= 0) ECUs.Dynamic_Step(cboIndex.SelectedIndex + 1); break;
                 case "btnECU10": ECUs.Tester_Present(); break;
                 case "btnECU11": ECUs.Message_Falg(); break;
                 case "btnECU12": ECUs.ESS_LampTest(); break;
@@ -1639,6 +1648,7 @@ namespace KI_RnB
 
             string SingleIO = "";
 
+            if (cboIdent.SelectedIndex < 0) return;
             switch (cboIdent.SelectedIndex)
             {
                 case 0: SingleIO = "2F F0 21"; break;

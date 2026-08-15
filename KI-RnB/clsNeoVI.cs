@@ -299,6 +299,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Device_Write: " + ex.Message);
             }
 
             return Ret;
@@ -324,6 +325,7 @@ namespace KI_RnB
             catch (Exception ex)
             {
                 //MessageBoxEx.Show(ex.Message);
+                Logs.MakeLog_File(Log_His.Err_, "Thread_NeoVI: " + ex.Message);
             }
         }
 

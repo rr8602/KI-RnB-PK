@@ -208,6 +208,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Init: " + ex.Message);
             }
         }
 
@@ -314,6 +315,7 @@ namespace KI_RnB
                 //if(ex.ErrorCode == 10061)
                 //MessageBox.Show(ex.Message);
                 //Fom_Main.Log_Data(ex.Message);
+                Logs.MakeLog_File(Log_His.Err_, "NIDAQmx_Run: " + ex.Message);
             }
 
             if (!threadStop) Start();
@@ -384,6 +386,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Scan_NIDAQmx: " + ex.Message);
             }
         }
 

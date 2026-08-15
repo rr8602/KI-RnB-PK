@@ -1817,6 +1817,7 @@ Retest_COMMUNICATION:
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Scan_Sensors: " + ex.Message);
             }
         }
 
@@ -2058,7 +2059,7 @@ Retest_COMMUNICATION:
             }
             catch (Exception ex)
             {
-                
+                Logs.MakeLog_File(Log_His.Err_, "Ret_ECU_Logs: " + ex.Message);
             }
 
             return Ret_Strs;

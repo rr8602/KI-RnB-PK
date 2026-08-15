@@ -122,7 +122,7 @@ RnB_Type=1
 SST_Type=0
 Brk_Type=1
 
-OnwerDrv=0
+OnwerDrv=1
 OwnerSpd=1560
 OwnerToq=100
 OwnerPBS=65

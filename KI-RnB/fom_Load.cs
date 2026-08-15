@@ -346,6 +346,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Order__Read: " + ex.Message);
             }
 
             if (Cal_Data.Count > 0)

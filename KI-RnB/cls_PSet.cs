@@ -1043,6 +1043,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "LoadDataRead: " + ex.Message);
             }
 
             return rload;
@@ -1160,6 +1161,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "LossDataRead: " + ex.Message);
             }
 
             return rloss;

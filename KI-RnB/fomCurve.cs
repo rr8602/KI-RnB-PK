@@ -98,6 +98,7 @@ namespace KI_RnB
                 else
                 {
                     crv_Mode = 1;   //새로 만들기
+                    this.Text = PSet.Lang_Crv[0] + " [" + pCurve + "]";
                 }
             }
         }
@@ -504,7 +505,9 @@ namespace KI_RnB
                 int ttime = 0;
                 for (int cnt = 0; cnt < dgvCurve.Rows.Count; cnt++)
                 {
-                    ttime += Convert.ToInt32(dgvCurve.Rows[cnt].Cells["Time"].Value);
+                    int cellVal = 0;
+                    int.TryParse(dgvCurve.Rows[cnt].Cells["Time"].Value?.ToString(), out cellVal);
+                    ttime += cellVal;
                     dgvCurve.Rows[cnt].Cells["T_Time"].Value = ttime.ToString();
                 }
 
@@ -523,6 +526,7 @@ namespace KI_RnB
 
             try
             {
+                if (dgvCurve.CurrentRow == null) return;
                 dgvCurve.CurrentRow.Cells["Segment"].Value = txt_Segm.Text.ToUpper();
                 dgvCurve.CurrentRow.Cells["Time"].Value = txt_Time.Text;
                 dgvCurve.CurrentRow.Cells["T_Time"].Value = txt_Time.Text;
@@ -534,7 +538,9 @@ namespace KI_RnB
 
                 for (int cnt = 0; cnt < dgvCurve.Rows.Count; cnt++)
                 {
-                    ttime += Convert.ToInt32(dgvCurve.Rows[cnt].Cells["Time"].Value);
+                    int cellVal = 0;
+                    int.TryParse(dgvCurve.Rows[cnt].Cells["Time"].Value?.ToString(), out cellVal);
+                    ttime += cellVal;
                     dgvCurve.Rows[cnt].Cells["T_Time"].Value = ttime.ToString();
                 }
 
@@ -548,6 +554,7 @@ namespace KI_RnB
         }
         private void CurveItem_Del()
         {
+            if (dgvCurve.CurrentRow == null) return;
             int ttime = 0;
             int Idx = dgvCurve.CurrentRow.Index;
 
@@ -555,7 +562,9 @@ namespace KI_RnB
 
             for (int cnt = 0; cnt < dgvCurve.Rows.Count; cnt++)
             {
-                ttime += Convert.ToInt32(dgvCurve.Rows[cnt].Cells["Time"].Value);
+                int cellVal = 0;
+                int.TryParse(dgvCurve.Rows[cnt].Cells["Time"].Value?.ToString(), out cellVal);
+                ttime += cellVal;
                 dgvCurve.Rows[cnt].Cells["T_Time"].Value = ttime.ToString();
             }
 

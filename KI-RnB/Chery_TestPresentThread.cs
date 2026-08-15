@@ -49,8 +49,10 @@ namespace KI_RnB
                 }
                 
             }
-            catch (Exception e)
-            { }
+            catch (Exception ex)
+            {
+                Logs.MakeLog_File(Log_His.Err_, "ThreadEcho: " + ex.Message);
+            }
 
             Console.WriteLine("");
         }

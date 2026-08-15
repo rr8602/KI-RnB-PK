@@ -194,6 +194,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Excel_Backup: " + ex.Message);
             }
         }
 
@@ -318,7 +319,7 @@ namespace KI_RnB
                 NI.Init();
                 NI.Start();
 
-                //ABSBoard.Setting(PSet.Ctrl_S, PSet.Ctrl_P.ToString(), 0);
+                ABSBoard.Setting(PSet.Ctrl_S, PSet.Ctrl_P.ToString(), 0);
                 Barcode1.Setting(PSet.BarC1S, PSet.BarC1P.ToString());
                 Pedal.Setting(PSet.PedalS, PSet.PedalP.ToString());
 
@@ -333,6 +334,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "tmrStart_Tick: " + ex.Message);
             }
 
             FomFlash.Show();
@@ -444,7 +446,7 @@ namespace KI_RnB
                     if (PLC.DO.Select_09) { TSet.SelectNo = "9"; strModel = DB_All.DBModel.KeyBox((PLC.OfSetL + PLC.Dist_I).ToString()); }
                     if (PLC.DO.Select_10) { TSet.SelectNo = "10"; strModel = DB_All.DBModel.KeyBox((PLC.OfSetL + PLC.Dist_J).ToString()); }
 
-                    if (TSet.SelectNo != "" && TSet.Select_o != TSet.SelectNo)
+                    if (TSet.SelectNo != "" && TSet.Select_o != TSet.SelectNo && !cboModel.DroppedDown)
                     {                  //12345678901234567
                         txtVinNo.Text = "TEST-000000000000";
                         TSet.Select_o = TSet.SelectNo;
@@ -764,6 +766,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "SelectResult: " + ex.Message);
             }
         }
 
@@ -841,6 +844,7 @@ namespace KI_RnB
             }
             catch(Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Order_Delete: " + ex.Message);
             }
 
             All_DataList(PSet.Sel_Date.ToString("yyyyMMdd"));
@@ -1231,6 +1235,7 @@ namespace KI_RnB
             catch (Exception ex)
             {
                 //throw;
+                Logs.MakeLog_File(Log_His.Err_, "MachineState: " + ex.Message);
             }
         }
         private static Color Ret_UpOrDown(int pMode, bool Up, bool Down)
@@ -1287,10 +1292,15 @@ namespace KI_RnB
             string now = DateTime.Now.ToString(H2Y.format0Time);
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lst_Logs.Items.Insert(0, "[" + now + "] " + msg); }));
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    lst_Logs.Items.Insert(0, "[" + now + "] " + msg);
+                    if (lst_Logs.Items.Count > 500) lst_Logs.Items.RemoveAt(lst_Logs.Items.Count - 1);
+                }));
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Prog_LogData: " + ex.Message);
             }
         }
 
@@ -1412,16 +1422,24 @@ namespace KI_RnB
         }
         public void PLC_Log_Data(string msg)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<string>(PLC_Log_Data), msg);
+                return;
+            }
+
             if (!chk_PLCs.Checked) return;
 
             string now = DateTime.Now.ToString(H2Y.format0Time);
 
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lst_PLCs.Items.Insert(0, "[" + now + "] " + msg); }));
+                lst_PLCs.Items.Insert(0, "[" + now + "] " + msg);
+                if (lst_PLCs.Items.Count > 500) lst_PLCs.Items.RemoveAt(lst_PLCs.Items.Count - 1);
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "PLC_Log_Data: " + ex.Message);
             }
         }
         public void PLC_ScanHerz(string pHerz)
@@ -1432,10 +1450,11 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "PLC_ScanHerz: " + ex.Message);
             }
         }
         #endregion
-        
+
         #region ABS Board Data
         private void chk_ABSB_Click(object sender, EventArgs e)
         {
@@ -1446,28 +1465,41 @@ namespace KI_RnB
         }
         public void ABSB_LogData(string msg)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<string>(ABSB_LogData), msg);
+                return;
+            }
+
             if (!chk_ABSB.Checked) return;
 
             string now = DateTime.Now.ToString(H2Y.format0Time);
 
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lst_ABSB.Items.Insert(0, "[" + now + "] " + msg); }));
+                lst_ABSB.Items.Insert(0, "[" + now + "] " + msg);
+                if (lst_ABSB.Items.Count > 500) lst_ABSB.Items.RemoveAt(lst_ABSB.Items.Count - 1);
             }
             catch (Exception ex)
             {
-                lst_ABSB.Items.Insert(0, "[" + now + "] " + ex.Message);
+                Logs.MakeLog_File(Log_His.Err_, "ABSB_LogData: " + ex.Message);
             }
         }
         public void ABSBScanHerz(string pHerz)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<string>(ABSBScanHerz), pHerz);
+                return;
+            }
+
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lblABSBH.Text = pHerz; }));
+                lblABSBH.Text = pHerz;
             }
             catch (Exception ex)
             {
-                lst_ABSB.Items.Insert(0, ex.Message);
+                Logs.MakeLog_File(Log_His.Err_, "ABSBScanHerz: " + ex.Message);
             }
         }
         #endregion
@@ -1482,17 +1514,24 @@ namespace KI_RnB
         }
         public void Indi_LogData(string msg)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<string>(Indi_LogData), msg);
+                return;
+            }
+
             if (!chk_Indi.Checked) return;
 
             string now = DateTime.Now.ToString(H2Y.format0Time);
 
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lst_Indi.Items.Insert(0, "[" + now + "] " + msg); }));
+                lst_Indi.Items.Insert(0, "[" + now + "] " + msg);
+                if (lst_Indi.Items.Count > 500) lst_Indi.Items.RemoveAt(lst_Indi.Items.Count - 1);
             }
             catch (Exception ex)
             {
-                lst_Indi.Items.Insert(0, "[" + now + "] " + ex.Message);
+                Logs.MakeLog_File(Log_His.Err_, "Indi_LogData: " + ex.Message);
             }
         }
         public void IndiScanHerz(string pHerz)
@@ -1504,6 +1543,7 @@ namespace KI_RnB
             catch (Exception ex)
             {
                 //this.Invoke(new MethodInvoker(delegate { lst_Indi.Items.Insert(0, ex.Message); }));
+                Logs.MakeLog_File(Log_His.Err_, "IndiScanHerz: " + ex.Message);
             }
         }
         #endregion
@@ -1592,7 +1632,11 @@ namespace KI_RnB
 
             try
             {
-                this.Invoke(new MethodInvoker(delegate { lst_DLCs.Items.Insert(0, "[" + now + "] " + msg); }));
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    lst_DLCs.Items.Insert(0, "[" + now + "] " + msg);
+                    if (lst_DLCs.Items.Count > 500) lst_DLCs.Items.RemoveAt(lst_DLCs.Items.Count - 1);
+                }));
             }
             catch (Exception ex)
             {
@@ -1790,6 +1834,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "TestImg_Show: " + ex.Message);
             }
         }
 
@@ -1870,6 +1915,7 @@ namespace KI_RnB
             }
             catch (Exception EX)
             {
+                Logs.MakeLog_File(Log_His.Err_, "btn_Rept_Click: " + EX.Message);
             }
         }
 

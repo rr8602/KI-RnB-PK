@@ -463,6 +463,7 @@ namespace KI_RnB
             }
             catch (Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Speash_Run: " + ex.Message);
             }
             if (thread != null) thread.Abort();
         }

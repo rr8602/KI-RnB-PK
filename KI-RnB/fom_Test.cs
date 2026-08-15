@@ -204,6 +204,8 @@ namespace KI_RnB
 
         public void Refresh_Data(int pStep)
         {
+            if (InvokeRequired) { BeginInvoke(new Action<int>(Refresh_Data), pStep); return; }
+
             lblStart.BackColor = PLC.DI.PSW_Start ? Color.Lime : Color.Transparent;
             lbl_Stop.BackColor = PLC.DI.PSW__Stop ? Color.Red : Color.Transparent;
             lblCheck.BackColor = PLC.DI.PSW_Check ? Color.Yellow : Color.Transparent;
@@ -262,6 +264,8 @@ namespace KI_RnB
 
         public void Refresh_Errs(byte pMode, string pMsgs)
         {
+            if (InvokeRequired) { BeginInvoke(new Action<byte, string>(Refresh_Errs), pMode, pMsgs); return; }
+
             if (pMode == 1 && pMsgs == "") return;
 
             switch (pMode)
@@ -277,6 +281,8 @@ namespace KI_RnB
         }
         public void Refresh_Msgs(string pMsgs, Color pColor)
         {
+            if (InvokeRequired) { BeginInvoke(new Action<string, Color>(Refresh_Msgs), pMsgs, pColor); return; }
+
             if (pMsgs == lbl_Msgs.Text && lbl_Msgs.ForeColor == pColor) return;
             if (pMsgs == "") return;
 
@@ -302,6 +308,8 @@ namespace KI_RnB
         }
         public void Judge___Msgs(string pPan)
         {
+            if (InvokeRequired) { BeginInvoke(new Action<string>(Judge___Msgs), pPan); return; }
+
             if (pPan == lbl_OkNg.Text) return;
             if (pPan == "") return;
 
@@ -310,6 +318,8 @@ namespace KI_RnB
         }
         public void RefreshOrder(string pOrder)
         {
+            if (InvokeRequired) { BeginInvoke(new Action<string>(RefreshOrder), pOrder); return; }
+
             if (lblOrder.Text == pOrder) return;
 
             lblOrder.Text = pOrder;
@@ -318,7 +328,9 @@ namespace KI_RnB
         }
         public void Refresh_Mode(string pMode)
         {
-            if (lbl_Mode.Text == pMode) return; 
+            if (InvokeRequired) { BeginInvoke(new Action<string>(Refresh_Mode), pMode); return; }
+
+            if (lbl_Mode.Text == pMode) return;
 
             lbl_Mode.Text = pMode;
         }
@@ -338,6 +350,8 @@ namespace KI_RnB
         
         public void Refresh_Info()
         {
+            if (InvokeRequired) { BeginInvoke(new Action(Refresh_Info)); return; }
+
             btnVinNo.Text = TSet.Vin___No;
             btnCount.Text = PSet.T__CNT.ToString() + "/" + PSet.CalCyc.ToString();
             btnModel.Text = TSet.CarModel;
@@ -808,6 +822,7 @@ namespace KI_RnB
             }
             catch(Exception ex)
             {
+                Logs.MakeLog_File(Log_His.Err_, "Show1_Pedals: " + ex.Message);
             }
 
             return bmp;
