@@ -160,13 +160,96 @@ add_table(
 )
 
 # ================================================================
-# 3. 에러 방어 코드 상세
+# 3. LX3 차종 추가
 # ================================================================
 doc.add_page_break()
-add_heading('3. 에러 방어 코드 상세', 1)
+add_heading('3. LX3 차종 추가', 1)
+
+doc.add_paragraph(
+    '파키스탄 HNMPL 공장에 LX3 HEV/ICE 2개 차종을 신규 추가하였다. '
+    'ECU 통신 클래스 신규 작성, 검사 시퀀스 커브 파일 생성, '
+    'DB 모델 데이터 등록, UI 콤보박스 항목 추가를 수행하였다.'
+)
+
+add_heading('3.1 ECU 통신 클래스 추가 (cls_ECUs.cs)', 2)
+add_table(
+    ['항목', 'LX3 HEV', 'LX3 ICE'],
+    [
+        ['ECU 모델명', 'MOBIS LX3 HEV', 'MOBIS LX3 ICE'],
+        ['ECU 타입', 'iMEB2 (현대모비스)', 'MEB5_1 (현대모비스)'],
+        ['통신 프로토콜', 'CAN (UDS)', 'CAN (UDS)'],
+        ['Send ID', '0x7E7', '0x7D1'],
+        ['Receive ID', '0x7EF', '0x7D9'],
+        ['SecurityAccess', '불필요 (bypass)', '불필요 (bypass)'],
+        ['클래스명', 'MOBIS_LX3H (line 4787~)', 'MOBIS_LX3I (line 5027~)'],
+    ],
+    [4, 5, 5]
+)
+
+add_heading('3.2 구현된 ECU 통신 기능 (14개)', 2)
+add_table(
+    ['#', '기능', '설명'],
+    [
+        ['1', 'Start_Communication', 'Extended Diagnostic Session 시작'],
+        ['2', 'Stop_Communication', 'Default Session 복귀'],
+        ['3', 'ECU_Reset', 'ECU 하드/소프트 리셋'],
+        ['4', 'ECU_Identification', 'ECU 버전/파트넘버 읽기'],
+        ['5', 'Read__DTC', 'Diagnostic Trouble Code 읽기'],
+        ['6', 'Clear_DTC', 'DTC 삭제'],
+        ['7', 'Check_Signals', '브레이크 스위치 신호 확인'],
+        ['8', 'WSS_Test', '4륜 속도센서 값 읽기'],
+        ['9', 'Tester_Present', '세션 유지 (Keep-alive)'],
+        ['10', 'Message_Falg', 'ECU 메시지 플래그 확인'],
+        ['11', 'Dynamic_Step', 'ABS Dynamic 단계별 제어'],
+        ['12', 'Dynamic_Auto', 'ABS Dynamic 자동 시퀀스'],
+        ['13', 'ESP_Step', 'ESC/ESP 단계별 제어'],
+        ['14', 'ESS_LampTest', 'ESS 경고등 테스트'],
+    ],
+    [1, 4, 11]
+)
+
+add_heading('3.3 ECUs 라우팅 등록 (cls_ECUs.cs)', 2)
+doc.add_paragraph(
+    'ECUs 클래스의 각 메서드(ECU_Setting, SecurityAccess, Start/Stop_Communication, '
+    'ECU_Reset, ECU_Identification, Read/Clear_DTC, Check_Signals, WSS_Test, '
+    'Tester_Present, Message_Falg, Dynamic_Step/Auto, ESP_Step, ESS_LampTest)에 '
+    'LX3 HEV/ICE case 분기를 추가하여 해당 클래스로 라우팅.'
+)
+
+add_heading('3.4 Driving Curve 파일 추가', 2)
+add_table(
+    ['항목', '내용'],
+    [
+        ['파일명', 'Curve(LX3).crv'],
+        ['위치', 'bin\\Debug\\DCurve\\'],
+        ['검사 스텝', '33 Steps'],
+        ['총 소요 시간', '167초'],
+        ['최대 속도', '100 km/h'],
+        ['주요 검사 항목', 'WSS, Speedometer, Cruise, Drag, Brake, ABS Dynamic, Parking'],
+    ],
+    [4, 12]
+)
+
+add_heading('3.5 UI 등록', 2)
+add_table(
+    ['파일', '내용'],
+    [
+        ['fomSetup.cs (line 257~258)', 'cbo_ECUs 콤보박스에 MOBIS LX3 HEV/ICE 항목 추가'],
+        ['fomDebug.cs (line 231~232)', 'cbo_ECUs 콤보박스에 MOBIS LX3 HEV/ICE 항목 추가'],
+        ['fomDebug.cs (line 1541~1552)', 'ESP Step 처리에 LX3 HEV/ICE case 분기 추가'],
+        ['DB (KI-RnB.mdb)', 'tbl_CarModel 테이블에 LX3 HEV/ICE 모델 데이터 등록'],
+    ],
+    [5, 11]
+)
+
+# ================================================================
+# 4. 에러 방어 코드 상세
+# ================================================================
+doc.add_page_break()
+add_heading('4. 에러 방어 코드 상세', 1)
 
 # 3.1
-add_heading('3.1 Parse → TryParse 전환 (1차)', 2)
+add_heading('4.1 Parse → TryParse 전환 (1차)', 2)
 doc.add_paragraph(
     '사용자 입력(TextBox) 및 외부 데이터(시리얼, 파일)를 파싱하는 코드에서 '
     'int.Parse, double.Parse, Convert.ToXxx 호출을 TryParse로 전환하여 '
@@ -183,7 +266,7 @@ add_table(
 )
 
 # 3.2
-add_heading('3.2 SelectedIndex / SelectedItem 방어', 2)
+add_heading('4.2 SelectedIndex / SelectedItem 방어', 2)
 add_table(
     ['파일', '수량', '내용'],
     [
@@ -196,7 +279,7 @@ add_table(
 )
 
 # 3.3
-add_heading('3.3 CrossThread 방어 (InvokeRequired)', 2)
+add_heading('4.3 CrossThread 방어 (InvokeRequired)', 2)
 doc.add_paragraph(
     'SerialPort DataReceived, Thread 등 백그라운드 스레드에서 UI 컨트롤에 '
     '직접 접근하는 코드에 InvokeRequired + BeginInvoke 패턴을 적용.'
@@ -215,7 +298,7 @@ add_table(
 )
 
 # 3.4
-add_heading('3.4 NullReference 방어', 2)
+add_heading('4.4 NullReference 방어', 2)
 add_table(
     ['파일', '메서드', '내용'],
     [
@@ -228,7 +311,7 @@ add_table(
 )
 
 # 3.5
-add_heading('3.5 빈 catch 블록 로그 추가', 2)
+add_heading('4.5 빈 catch 블록 로그 추가', 2)
 doc.add_paragraph(
     '프로젝트 전체 170개 catch 블록 중 실제로 비어있는 36개에 '
     'Logs.MakeLog_File(Log_His.Err_, "메서드명: " + ex.Message) 로그를 추가. '
@@ -249,7 +332,7 @@ add_table(
 )
 
 # 3.6
-add_heading('3.6 ListBox 누적 방지', 2)
+add_heading('4.6 ListBox 누적 방지', 2)
 doc.add_paragraph(
     '검사 반복 시 ListBox 항목이 무한 누적되어 UI 성능이 저하되고, '
     'Invoke 데드락으로 바코드 수신이 중단되는 문제를 방지하기 위해 '
@@ -272,9 +355,9 @@ doc.add_paragraph('※ 삭제된 로그는 파일(Log File.log)에 별도 기록
 # 4. 기타 수정
 # ================================================================
 doc.add_page_break()
-add_heading('4. 기타 수정', 1)
+add_heading('5. 기타 수정', 1)
 
-add_heading('4.1 cboModel 드롭다운 닫힘 방지', 2)
+add_heading('5.1 cboModel 드롭다운 닫힘 방지', 2)
 doc.add_paragraph(
     '현장 PC에서 cboModel 드롭다운을 열면 목록이 나타났다가 바로 사라지는 현상 대응. '
     'tmr_Main 타이머(300ms)에서 PLC Select 신호 처리 시 cboModel.Text를 변경하면 '
@@ -284,20 +367,20 @@ add_bullet('원인: ', 'PLC Select 신호 → Key_Vehicles() → cboModel.Text �
 add_bullet('수정: ', '!cboModel.DroppedDown 조건 추가. 드롭다운이 열린 동안 PLC Select 처리 지연')
 add_bullet('영향: ', '드롭다운 닫힌 후 다음 틱(0.3초 이내)에서 정상 처리. 패널티 없음')
 
-add_heading('4.2 fomCurve 새 커브 타이틀 표시', 2)
+add_heading('5.2 fomCurve 새 커브 타이틀 표시', 2)
 doc.add_paragraph(
     '새 Driving Curve 생성 시 fomCurve 타이틀바에 모델명이 표시되지 않던 문제 수정. '
     'crv_Mode=1 (새로 만들기) 분기에 this.Text 설정 추가.'
 )
 
-add_heading('4.3 icsNeoClass catch 타입 복원', 2)
+add_heading('5.3 icsNeoClass catch 타입 복원', 2)
 doc.add_paragraph(
     'ConvertFromHex 메서드의 catch가 OverflowException에서 Exception으로 '
     '확대되었던 것을 System.OverflowException으로 복원. '
     'FormatException 등 다른 예외가 삼켜지는 사이드 이펙트 방지.'
 )
 
-add_heading('4.4 배포용 원복 (2건)', 2)
+add_heading('5.4 배포용 원복 (2건)', 2)
 add_table(
     ['항목', '개발 PC', '현장 배포'],
     [
@@ -310,7 +393,7 @@ add_table(
 # ================================================================
 # 5. 사이드 이펙트 검증 결과
 # ================================================================
-add_heading('5. 사이드 이펙트 검증 결과', 1)
+add_heading('6. 사이드 이펙트 검증 결과', 1)
 
 add_table(
     ['검증 항목', '결과', '비고'],
@@ -331,7 +414,7 @@ add_table(
 # ================================================================
 # 6. 수정 파일 목록
 # ================================================================
-add_heading('6. 수정 파일 목록 (25개)', 1)
+add_heading('7. 수정 파일 목록 (25개)', 1)
 
 add_table(
     ['#', '파일명', '수정 내용 요약'],
@@ -367,7 +450,7 @@ add_table(
 # ================================================================
 # 7. 현장 확인 필요 사항
 # ================================================================
-add_heading('7. 현장 확인 필요 사항', 1)
+add_heading('8. 현장 확인 필요 사항', 1)
 
 add_table(
     ['#', '항목', '확인 방법', '비고'],
