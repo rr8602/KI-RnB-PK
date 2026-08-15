@@ -1,0 +1,31 @@
+ECU CONNECT
+Start Communication
+ECU Identification
+Diagnostic Section
+Security Access
+Check E&F Process Byte
+Check System Staus
+'Speed limited and Valve relay shut down' deactivation
+Lever [N], Vehicle Stop
+Wheel Speed Sensor(WSS)
+Lever [N], Vehicle Stop
+ATM Mode Check
+40 km/h Speedometer
+Max Speed Acceleration
+Engine Braking
+Drag Test
+Base Brake Test
+Dynamic Test
+Lever [N], Vehicle Stop
+Lever [R], Acceleration 5kph
+Lever [N], Vehicle Stop
+APB Function Test
+Idle Stability Check
+Parking Release
+Check System Staus
+Write EOL Process Byte
+DTC Read
+DTC Clear
+'Speed limited and Valve relay shut dow' activation
+Stop Communication
+Test Fiinish

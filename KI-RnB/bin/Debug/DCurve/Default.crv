@@ -1,0 +1,18 @@
+구분,소요시간,누적시간,속도,측정항목,차량,장비,설명
+INITIALIZATION|3|3|0|Initialization|X|X|Initialization|
+[N] STOP|3|6|0|Lever [N], Vehicle Stop|X|X|Lever [N], Vehicle Stop|
+MODE CHECK|3|9|0|Drive Mode Check|O|X|Drive Mode Check|
+SPEED UP|10|19|40|40 km/h Speedometer|O|X|40km/h|
+SMT TEST|5|24|40|40 km/h Check SW|O|X|40 km/h Check SW|
+MAX SPEED|30|54|100| Max Speed Acceleration|O|X| Max Speed Acceleration|
+ENGINE BRAKING|7|61|90|Engine Braking|O|X|Pedal release|
+DRAG TEST|5|66|75|Drag Test|O|X|Drag Test|
+BRAKE TEST|3|69|10|Base Brake Test|O|X|Base Brake Test|
+[N] STOP|3|72|0|Lever [N], Vehicle Stop|O|X|Lever [N], Vehicle Stop|
+REVERSE|5|77|0|Lever[R]|O|X|Lever[R]|
+[R] 5KPH|5|82|5|Lever [R], 5kph|O|X|Lever [R], Acceleration 5kph|
+[N] STOP|3|85|0|Lever [N], Vehicle Stop|O|X|Lever [N], Vehicle Stop|
+PARKING READY|5|90|0|Parking Brake Pull|X|X|Parking Brake Pull|
+PARKING TEST|5|95|0|Parking Brake Test|X|O|Parking Brake Test|
+IDLE|3|98|0|Idle|X|X|Idle Stability Check|
+FIINISH|5|103|0|Test Fiinish|X|X|STOP SW PULL|

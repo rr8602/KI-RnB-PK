@@ -1,0 +1,154 @@
+[Machine]
+PLC Setting=192.0.1.254
+PLC Port=7000
+Control Setting=38400,n,8,1
+Control Port=3
+Motor FL Setting=9800,n,8,1
+Motor FL Port=5
+Motor FR Setting=9800,n,8,1
+Motor FR Port=6
+Motor RL Setting=9800,n,8,1
+Motor RL Port=7
+Motor RR Setting=9800,n,8,1
+Motor RR Port=8
+Barcode1 Setting=9600,n,8,1
+Barcode1 Port=2
+Barcode2 Setting=9800,n,8,1
+Barcode2 Port=2
+Calibration Cycle=6000
+Test Count=4148
+Test Fail=0
+Test Pass=4148
+Indicator Setting=9600,n,8,1
+Indicator Port=4
+DLC Setting=9800,n,8,1
+DLC Port=10
+Password=1234
+Print Mode=0
+Drive Setting=192.0.1.101
+Drive Port=502
+Speach=0
+Pedal Brake Setting=
+Pedal Brake Port=0
+
+[Wheelbase]
+Min. Limit=0
+Max. Limit=1400
+Off set=2322
+
+[Roll]
+Diameter FL=908
+Pulse FL=1000
+Diameter FR=908
+Pulse FR=1000
+Diameter RL=908
+Pulse RL=1000
+Diameter RR=908
+Pulse RR=1000
+
+[Directory]
+Sett=0
+DB=0
+Log=0
+Data=0
+Image=0
+Curve=0
+
+[AD Signal]
+CH0Zero=0
+CH1Zero=0
+CH2Zero=2675
+CH3Zero=3176
+CH4Zero=2685
+CH5Zero=3913
+
+CH0Span=-0.01133
+CH1Span=0.01
+CH2Span=0.0875695
+CH3Span=0.08786347
+CH4Span=0.06553018
+CH5Span=0.06376018
+
+[Unit]
+Speed=0
+Brake=0
+Distance=0
+
+[Distance]
+Set A=348
+Set B=378
+Set C=518
+Set D=443
+Set E=278
+Set F=328
+Set G=398
+Set H=428
+Set I=678
+Set J=108
+
+[Filter]
+Average=19
+Sort=19
+Mode=1
+
+[Moment]
+F-L=55909249.02
+F-R=55909249.02
+R-L=55909249.02
+R-R=55909249.02
+
+[Ratio]
+F-L=6.666666666
+F-R=6.666666666
+R-L=6.666666666
+R-R=6.666666666
+
+[Onwer Setting]
+Onwer 01=0
+Onwer 02=0
+Onwer 03=0
+Onwer 04=72245
+Onwer 05=0
+Onwer 06=0
+Onwer 07=0
+Onwer 08=0
+Onwer 09=0
+Onwer 0A=0
+Onwer 0B=0
+Onwer 0C=0
+Onwer 00=1
+
+RnB_Type=1
+SST_Type=0
+Brk_Type=1
+
+OnwerDrv=1
+OwnerSpd=1560
+OwnerToq=100
+OwnerPBS=65
+Owner FL=39
+Owner FR=78
+Owner RL=117
+Owner RR=156
+Use_Door=0
+Owner STD FL=3
+Owner STD FR=6
+Owner STD RL=9
+Owner STD RR=12
+Print__X=-25
+Print__Y=0
+[PLC Setting]
+PLC_GapT=20
+CNT_Stop=2
+
+[Weight Setting]
+WGT_Capa=3000
+WGTLimit=100
+WGT_Safe=20
+
+[Brake Setting]
+BRK_Capa=3000
+BrkRatio=8.38
+BRKCount=2
+BRKPedal=0
+OwnerCrv=0

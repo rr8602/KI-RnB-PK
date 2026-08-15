@@ -1,0 +1,25 @@
+[Main Form]
+Top=0
+Left=0
+Width=1024
+Height=768
+[Information]
+Top=0
+Left=1024
+Width=1024
+Height=768
+[Test Form]
+Top=0
+Left=1024
+Width=1024
+Height=768
+[Sub Form]
+Top=0
+Left=1024
+Width=1024
+Height=768
+[Ask Form]
+Top=208
+Left=1163
+Width=0
+Height=0

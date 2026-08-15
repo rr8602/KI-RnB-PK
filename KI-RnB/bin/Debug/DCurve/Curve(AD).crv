@@ -1,0 +1,34 @@
+구분,소요시간,누적시간,속도,측정항목,차량,장비,설명
+INITIALIZATION|3|3|0|Initialization|X|X|Initialization|
+ECU CONNECT|3|6|0|ECU CONNECT|X|X|ECU CONNECT|
+START COMMUNICATION|5|11|0|Start Communication|X|X|Start Communication|
+ECU IDENTIFICATION|3|14|0|ECU Identification|X|X|ECU Identification|
+CHECK SYSTEM|3|17|0|Check of the signals|X|X|Check of the input and output signals|
+DTC READ|3|20|0|DTC READ|X|X|DTC READ|
+DTC CLEAR|3|23|0|DTC CLEAR|X|X|DTC CLEAR|
+[N] STOP|3|26|0|Lever [N], Vehicle Stop|X|X|Lever [N], Vehicle Stop|
+WSS READY|4|30|5|Wheel Speed Sensor|X|X|WSS Check Speed|
+WSS TEST|10|40|5|WSS Check Speed|X|O|WSS Check Speed|
+[N] STOP|3|43|0|Lever [N], Vehicle Stop|X|X|Lever [N], Vehicle Stop|
+MODE CHECK|3|46|0|Drive Mode Check|X|X|Drive Mode Check|
+SPEED UP|10|56|40|40 km/h Speedometer|O|X|40km/h|
+SMT TEST|5|61|40|40 km/h Check SW|O|X|40 km/h Check SW|
+CRUISE UP|10|71|80|80 km/h |O|X|80 km/h|
+CRUISE CHECK|20|91|80|CRUISE CHECK|O|X|CRUISE CHECK|
+MAX SPEED|10|101|100| Max Speed Acceleration|O|X| Max Speed|
+ENGINE BRAKING|10|111|90|Engine Braking|O|X|Pedal release|
+DRAG TEST|3|114|80|Drag Test|O|X|Drag Test|
+BRAKE TEST|3|117|60|Base Brake Test|O|X|Base Brake Test|
+DYNAMIC READY|2|119|55|Pedal release|O|X|Pedal release|
+DYNAMIC TEST|4|123|10|Keep the brake pedal|O|X|Keep the brake pedal|
+[N] STOP|3|126|0|Lever [N], Vehicle Stop|X|X|Lever [N], Vehicle Stop|
+REVERSE|5|131|0|Lever[R]|X|X|Lever[R]|
+[R] 5KPH|5|136|5|Lever [R], Acceleration 5kph|O|X|Lever [R] 5kph|
+[N] STOP|3|139|0|Lever [N], Vehicle Stop|X|X|Lever [N], Vehicle Stop|
+PARKING READY|5|144|0|Parking Brake Pull|X|X|Parking Brake Pull|
+PARKING TEST|5|149|0|Parking Brake Test|X|O|Parking Brake Test|
+IDLE|3|152|0|Idle|X|X|Idle Stability Check|
+DTC READ|4|156|0|DTC Read|X|X|DTC Read|
+DTC CLEAR|3|159|0|DTC CLEAR|X|X|DTC CLEAR|
+ECU DISCONNECT|3|162|0|ECU DISCONNECT|X|X|ECU DISCONNECT|
+FIINISH|5|167|0|Test Fiinish|X|X|STOP SW PULL|

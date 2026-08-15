@@ -1,0 +1,19 @@
+[Channel Parameters]
+ENC_Z_On=0
+ENC_Type=-1
+ENCPhase=-1
+ENC_ZVal=0
+ENCPulse=24
+InitDist=
+[Timing Parameters]
+ScanRate=1000
+Scan_CNT=100
+[ENC Channel Setting]
+FL 0=/Dev1/PFI39
+FL 1=Dev1/ctr0
+FR 0=/Dev1/PFI35
+FR 1=Dev1/ctr1
+RL 0=/Dev1/PFI31
+RL 1=Dev1/ctr2
+RR 0=/Dev1/PFI27
+RR 1=Dev1/ctr3

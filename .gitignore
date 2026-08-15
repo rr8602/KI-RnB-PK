@@ -1,0 +1,46 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+app.publish/
+
+# Build intermediates
+[Oo]bj/
+
+# Build output
+*.exe
+*.pdb
+*.vshost.*
+*.application
+*.manifest
+
+# Old backups
+KI-RnB/bin조만근 받은거/
+KI-RnB/bin/KI-RnB/
+KI-RnB/bin/KI-RnB.zip
+KI-RnB/bin/Debug/KI-RnB_241120.zip
+KI-RnB/bin/Release/
+
+# DB backups (keep only main KI-RnB.mdb)
+KI-RnB/bin/Debug/DB/KI-RnB - *.mdb
+KI-RnB/DB/*.mdf
+KI-RnB/DB/*.ldf
+
+# Large runtime folders
+KI-RnB/bin/Debug/Flash/
+KI-RnB/bin/Debug/DB-1/
+KI-RnB/bin/Debug/DB-2/
+KI-RnB/bin/Debug/Data/
+KI-RnB/bin/Debug/Log/
+KI-RnB/bin/Debug/Cal/
+KI-RnB/bin/Debug/Setting-1/
+KI-RnB/bin/Debug/DCurve-251201/
+Setup/
+
+# Temp
+~$*
+*.ldb
+*.log
+Thumbs.db
+Desktop.ini
