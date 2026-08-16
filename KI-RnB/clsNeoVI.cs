@@ -682,7 +682,14 @@ namespace KI_RnB
 
                                     if (GetD[1] == "7F")
                                     {
-                                        Return = false;
+                                        if (GetD[3] == "78")
+                                        {
+                                            //NRC 0x78: requestCorrectlyReceivedResponsePending - 다음 응답 대기
+                                        }
+                                        else
+                                        {
+                                            Return = false;
+                                        }
                                     }
                                     else
                                     {

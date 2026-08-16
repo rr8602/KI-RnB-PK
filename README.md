@@ -124,10 +124,13 @@
 ---
 
 ### 4. 기타 수정
-- **바코드 VIN 우선 적용**: 결과 목록 클릭으로 txtVinNo에 이전 VIN이 남아있어도, 바코드 스캔 시 새 VIN이 우선 적용되도록 수정. `SelModelList`에서 `TSet.Vin___No`를 직접 설정하고, `OrderStarted()`에서는 이미 설정된 값이 있으면 유지
-- **WSS 파싱 오프셋**: LX3 iMEB2 ECU의 WSS DID(01 04) 응답 오프셋 수정 (`Ident[15~18]` → `Ident[14~17]`)
+- **바코드 VIN 우선 적용**: `txtVinNo`를 `Key_Vehicles` 호출 전에 설정하여 `DoEvents` 경쟁 방지. 바코드 스캔 시 새 VIN이 항상 우선 적용
+- **WSS 파싱 오프셋**: LX3 HEV(iMEB2) `Ident[14~17]`, LX3 ICE(MEB5_1) `Ident[15~18]` (응답 길이 차이)
+- **NRC 0x78 pending 처리**: `clsNeoVI.cs`에서 `7F XX 78` 응답 시 실패 대신 다음 응답 대기. LX3 DTC Clear 시 X 판정 해결
+- **PLC Cancel/Stop 시 VIN 숨김**: 검사 시작 전 Cancel/Stop 시 `FomFlash.VinNo_Hide()` 호출
+- **dgv_List 더블클릭 에러 수정**: `CellDoubleClick` 이벤트 등록 제거 (`CurrentCellChanged`와 재진입 충돌)
 - **DB 컬럼명**: `dbBalance` → `dbCarBalance`로 DB 컬럼명과 일치하도록 수정
-- **dgvModel CurrentRow null 체크**: fomSetup dgvModel_CurrentCellChanged에서 CurrentRow null 체크 추가
+- **dgvModel CurrentRow null 체크**: fomSetup `dgvModel_CurrentCellChanged`에서 CurrentRow null 체크 추가
 - **cboModel 드롭다운**: PLC Select 처리 시 `!cboModel.DroppedDown` 체크 추가
 - **fomCurve 타이틀**: 새 커브 생성 시 타이틀바에 모델명 표시
 - **icsNeoClass**: ConvertFromHex catch 타입 OverflowException 유지

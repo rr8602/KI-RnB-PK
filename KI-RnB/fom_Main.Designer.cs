@@ -911,7 +911,7 @@
             this.dgv_List.TabIndex = 1;
             this.dgv_List.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_List_CellClick);
             this.dgv_List.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_List_CellContentClick);
-            this.dgv_List.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_List_CellDoubleClick);
+            //this.dgv_List.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_List_CellDoubleClick);
             this.dgv_List.CurrentCellChanged += new System.EventHandler(this.dgv_List_CurrentCellChanged);
             this.dgv_List.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgv_List_RowPostPaint);
             // 

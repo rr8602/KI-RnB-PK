@@ -453,6 +453,11 @@ namespace KI_RnB
                         Key_Vehicles(strModel);
                     }
 
+                    if (!TSet.Test_Run && (PLC.DI.Cancel_PB || PLC.DI.GOTCancel || PLC.DI.Stop___PB || PLC.DI.GOT__Stop))
+                    {
+                        FomFlash.VinNo_Hide();  //검사 시작 전 Cancel/Stop 시 VIN 숨김
+                    }
+
                     if (PLC.DI.Start__PB || PLC.DI.GOT_Start)
                     {
                         OrderStarted();
@@ -721,13 +726,7 @@ namespace KI_RnB
         }
         private void dgv_List_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            SelectRow = e.RowIndex;
-            if (SelectRow >= 0)
-            {
-                string AcptNo = dgv_List[0, SelectRow].Value.ToString();
-
-                SelectResult(AcptNo);
-            }
+            //CurrentCellChanged에서 이미 SelectResult 처리. 중복 호출 시 재진입 에러 발생
         }
 
         private void SelectResult(string pAcptNo)
@@ -980,7 +979,7 @@ namespace KI_RnB
             TSet.TestStop = false;
 
             TSet.AcceptNo = AcptNo;                             //측정 번호
-            if (TSet.Vin___No == "") TSet.Vin___No = txtVinNo.Text; //바코드 VIN이 이미 설정되어 있으면 유지, 아니면 txtVinNo 사용 - 260816 수정
+            TSet.Vin___No = txtVinNo.Text;                      //바코드
             TSet.CarModel = cboModel.Text;                      //모델명
             TSet.ECUModel = lbl__ECU.Text;                      //ECU 모델명
             TSet.CarBarID = lblEngin.Text;                      //바코드 구분자
@@ -1111,6 +1110,7 @@ namespace KI_RnB
         {
             TSet.TestStop = true;
             CheryEchoThread.SendEcho(false);
+            FomFlash.VinNo_Hide();
             Prog_LogData("Program STOP Button");
         }
 
@@ -1598,9 +1598,8 @@ namespace KI_RnB
                 FomFlash.VinNo_Show(DB_All.DBModel.dbCarModel, pVinNo);
                 cboModel.Text = DB_All.DBModel.dbCarModel;
 
+                txtVinNo.Text = pVinNo;                             //Key_Vehicles 전에 설정 (DoEvents 경쟁 방지)
                 Key_Vehicles(DB_All.DBModel.dbCarModel);
-                txtVinNo.Text = pVinNo;
-                TSet.Vin___No = pVinNo;                             //바코드 VIN 우선 적용 (OrderStarted에서 txtVinNo 덮어쓰기 방지) - 260816 수정
                 Prog_LogData("Barcode OK");
                 OrderStarted();
             }

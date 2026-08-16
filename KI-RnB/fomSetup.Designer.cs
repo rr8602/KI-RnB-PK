@@ -499,6 +499,7 @@
             this.btn_Save = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.tmrSetup = new System.Windows.Forms.Timer(this.components);
+            this.chk_balance = new System.Windows.Forms.CheckBox();
             this.tab_Sett.SuspendLayout();
             this.tpgMachine.SuspendLayout();
             this.gbxPrint.SuspendLayout();
@@ -1921,6 +1922,7 @@
             // 
             // tpg_Info
             // 
+            this.tpg_Info.Controls.Add(this.chk_balance);
             this.tpg_Info.Controls.Add(this.cboWBase);
             this.tpg_Info.Controls.Add(this.cbo_ECUs);
             this.tpg_Info.Controls.Add(this.cboParam);
@@ -5300,6 +5302,16 @@
             // 
             this.tmrSetup.Tick += new System.EventHandler(this.tmrSetup_Tick);
             // 
+            // chk_balance
+            // 
+            this.chk_balance.AutoSize = true;
+            this.chk_balance.Location = new System.Drawing.Point(523, 53);
+            this.chk_balance.Name = "chk_balance";
+            this.chk_balance.Size = new System.Drawing.Size(70, 16);
+            this.chk_balance.TabIndex = 14;
+            this.chk_balance.Text = "Balance";
+            this.chk_balance.UseVisualStyleBackColor = true;
+            // 
             // fomSetup
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -5953,5 +5965,6 @@
         private System.Windows.Forms.TextBox txtCPark;
         private System.Windows.Forms.TextBox txt_YPos;
         private System.Windows.Forms.TextBox txt_XPos;
+        private System.Windows.Forms.CheckBox chk_balance;
     }
 }

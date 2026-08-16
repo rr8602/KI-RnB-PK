@@ -5024,7 +5024,7 @@ namespace KI_RnB
         #endregion
     }
 
-    public static class MOBIS_LX3I      //LX3 ICE MEB5_1  HYUNDAI MOBIS (250710)
+    public static class MOBIS_LX3I      //LX3 ICE MEB5_1  HYUNDAI MOBIS (250710)  WSS offset: [15~18] (HEV와 다름)
     {
         #region Variable declaration
         public static string ECU_ID;
@@ -5149,10 +5149,10 @@ namespace KI_RnB
 
             if (Ident.Length < 42) return;
 
-            ECUs.WSS_FL = H2Y.HexTobyte(Ident[14]);
-            ECUs.WSS_FR = H2Y.HexTobyte(Ident[15]);
-            ECUs.WSS_RL = H2Y.HexTobyte(Ident[16]);
-            ECUs.WSS_RR = H2Y.HexTobyte(Ident[17]);
+            ECUs.WSS_FL = H2Y.HexTobyte(Ident[15]);
+            ECUs.WSS_FR = H2Y.HexTobyte(Ident[16]);
+            ECUs.WSS_RL = H2Y.HexTobyte(Ident[17]);
+            ECUs.WSS_RR = H2Y.HexTobyte(Ident[18]);
         }
         public static bool Message_Falg()           //CommunicationControl (0x28)
         {
