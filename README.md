@@ -124,6 +124,10 @@
 ---
 
 ### 4. 기타 수정
+- **바코드 VIN 우선 적용**: 결과 목록 클릭으로 txtVinNo에 이전 VIN이 남아있어도, 바코드 스캔 시 새 VIN이 우선 적용되도록 수정. `SelModelList`에서 `TSet.Vin___No`를 직접 설정하고, `OrderStarted()`에서는 이미 설정된 값이 있으면 유지
+- **WSS 파싱 오프셋**: LX3 iMEB2 ECU의 WSS DID(01 04) 응답 오프셋 수정 (`Ident[15~18]` → `Ident[14~17]`)
+- **DB 컬럼명**: `dbBalance` → `dbCarBalance`로 DB 컬럼명과 일치하도록 수정
+- **dgvModel CurrentRow null 체크**: fomSetup dgvModel_CurrentCellChanged에서 CurrentRow null 체크 추가
 - **cboModel 드롭다운**: PLC Select 처리 시 `!cboModel.DroppedDown` 체크 추가
 - **fomCurve 타이틀**: 새 커브 생성 시 타이틀바에 모델명 표시
 - **icsNeoClass**: ConvertFromHex catch 타입 OverflowException 유지

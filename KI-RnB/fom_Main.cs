@@ -585,7 +585,7 @@ namespace KI_RnB
                 if (carWbase == PLC.OfSetL + PLC.Dist_I) SelWBase = "9";
                 if (carWbase == PLC.OfSetL + PLC.Dist_J) SelWBase = "10";
 
-                PLC.DO.Vehicle_Balance = DB_All.DBModel.dbBalance.ToUpper() == "Y";
+                PLC.DO.Vehicle_Balance = DB_All.DBModel.dbCarBalance.ToUpper() == "Y";
 
                 PLC.DO.Vehicle01 = false;
                 PLC.DO.Vehicle02 = false;
@@ -980,7 +980,7 @@ namespace KI_RnB
             TSet.TestStop = false;
 
             TSet.AcceptNo = AcptNo;                             //측정 번호
-            TSet.Vin___No = txtVinNo.Text;                      //바코드
+            if (TSet.Vin___No == "") TSet.Vin___No = txtVinNo.Text; //바코드 VIN이 이미 설정되어 있으면 유지, 아니면 txtVinNo 사용 - 260816 수정
             TSet.CarModel = cboModel.Text;                      //모델명
             TSet.ECUModel = lbl__ECU.Text;                      //ECU 모델명
             TSet.CarBarID = lblEngin.Text;                      //바코드 구분자
@@ -1600,6 +1600,7 @@ namespace KI_RnB
 
                 Key_Vehicles(DB_All.DBModel.dbCarModel);
                 txtVinNo.Text = pVinNo;
+                TSet.Vin___No = pVinNo;                             //바코드 VIN 우선 적용 (OrderStarted에서 txtVinNo 덮어쓰기 방지) - 260816 수정
                 Prog_LogData("Barcode OK");
                 OrderStarted();
             }

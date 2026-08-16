@@ -1399,7 +1399,7 @@ namespace KI_RnB
             main.DB_All.DBModel.dbCarDrive = cboDrive.Text;
             main.DB_All.DBModel.dbCarWbase = cboWBase.Text;
             main.DB_All.DBModel.dbCarParam = cboParam.Text;
-            main.DB_All.DBModel.dbBalance = chk_balance.Checked ? "Y" : "N";
+            main.DB_All.DBModel.dbCarBalance = chk_balance.Checked ? "Y" : "N";
             main.DB_All.DBModel.Insert();
 
             AllModelList();
@@ -1421,7 +1421,7 @@ namespace KI_RnB
                 main.DB_All.DBModel.dbCarDrive = cboDrive.Text;
                 main.DB_All.DBModel.dbCarWbase = cboWBase.Text;
                 main.DB_All.DBModel.dbCarParam = cboParam.Text;
-                main.DB_All.DBModel.dbBalance = chk_balance.Checked ? "Y" : "N";
+                main.DB_All.DBModel.dbCarBalance = chk_balance.Checked ? "Y" : "N";
 
                 main.DB_All.DBModel.Update(pModel);
             }
@@ -1463,6 +1463,7 @@ namespace KI_RnB
         {
             try
             {
+                if (((DataGridView)sender).CurrentRow == null) return;
                 int SelectRow = ((DataGridView)sender).CurrentRow.Index;
 
                 SelectModel(SelectRow);

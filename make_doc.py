@@ -395,7 +395,26 @@ doc.add_paragraph('※ 삭제된 로그는 파일(Log File.log)에 별도 기록
 doc.add_page_break()
 add_heading('6. 기타 수정', 1)
 
-add_heading('6.1 cboModel 드롭다운 닫힘 방지', 2)
+add_heading('6.1 바코드 VIN 우선 적용', 2)
+doc.add_paragraph(
+    '결과 목록(dgv_List)을 클릭하면 SelectResult()에서 txtVinNo에 이전 VIN이 표시된다. '
+    '이 상태에서 바코드를 스캔하면 타이밍에 따라 이전 VIN으로 검사가 시작되는 문제 수정.'
+)
+add_bullet('원인: ', 'OrderStarted()에서 TSet.Vin___No = txtVinNo.Text로 읽는데, txtVinNo에 이전 결과의 VIN이 남아있음')
+add_bullet('수정: ', 'SelModelList()에서 TSet.Vin___No = pVinNo로 직접 설정. OrderStarted()에서는 이미 설정된 값이 있으면 유지')
+add_bullet('결과: ', '바코드 스캔 VIN이 항상 우선 적용. 결과 목록 표시 기능은 유지')
+
+add_heading('6.2 WSS 파싱 오프셋 수정', 2)
+doc.add_paragraph(
+    'LX3 iMEB2 ECU의 WSS DID(01 04) 응답 포맷이 다른 MOBIS ECU와 1바이트 차이. '
+    'Ident[15~18] → Ident[14~17]로 수정. (FL=6,FR=8,RL=12,RR=255 → FL=3,FR=6,RL=8,RR=12)'
+)
+
+add_heading('6.3 DB 컬럼명 수정 및 기타', 2)
+add_bullet('', 'dbBalance → dbCarBalance: DB 컬럼명과 코드 일치시킴')
+add_bullet('', 'dgvModel CurrentRow null 체크 추가 (fomSetup dgvModel_CurrentCellChanged)')
+
+add_heading('6.4 cboModel 드롭다운 닫힘 방지', 2)
 doc.add_paragraph(
     '현장 PC에서 cboModel 드롭다운을 열면 목록이 나타났다가 바로 사라지는 현상 대응. '
     'tmr_Main 타이머(300ms)에서 PLC Select 신호 처리 시 cboModel.Text를 변경하면 '
@@ -405,20 +424,20 @@ add_bullet('원인: ', 'PLC Select 신호 → Key_Vehicles() → cboModel.Text �
 add_bullet('수정: ', '!cboModel.DroppedDown 조건 추가. 드롭다운이 열린 동안 PLC Select 처리 지연')
 add_bullet('영향: ', '드롭다운 닫힌 후 다음 틱(0.3초 이내)에서 정상 처리. 패널티 없음')
 
-add_heading('6.2 fomCurve 새 커브 타이틀 표시', 2)
+add_heading('6.5 fomCurve 새 커브 타이틀 표시', 2)
 doc.add_paragraph(
     '새 Driving Curve 생성 시 fomCurve 타이틀바에 모델명이 표시되지 않던 문제 수정. '
     'crv_Mode=1 (새로 만들기) 분기에 this.Text 설정 추가.'
 )
 
-add_heading('6.3 icsNeoClass catch 타입 복원', 2)
+add_heading('6.6 icsNeoClass catch 타입 복원', 2)
 doc.add_paragraph(
     'ConvertFromHex 메서드의 catch가 OverflowException에서 Exception으로 '
     '확대되었던 것을 System.OverflowException으로 복원. '
     'FormatException 등 다른 예외가 삼켜지는 사이드 이펙트 방지.'
 )
 
-add_heading('6.4 배포용 원복 (2건)', 2)
+add_heading('6.7 배포용 원복 (2건)', 2)
 add_table(
     ['항목', '개발 PC', '현장 배포'],
     [

@@ -4909,10 +4909,10 @@ namespace KI_RnB
 
             if (Ident.Length < 42) return;
 
-            ECUs.WSS_FL = H2Y.HexTobyte(Ident[15]);
-            ECUs.WSS_FR = H2Y.HexTobyte(Ident[16]);
-            ECUs.WSS_RL = H2Y.HexTobyte(Ident[17]);
-            ECUs.WSS_RR = H2Y.HexTobyte(Ident[18]);
+            ECUs.WSS_FL = H2Y.HexTobyte(Ident[14]);
+            ECUs.WSS_FR = H2Y.HexTobyte(Ident[15]);
+            ECUs.WSS_RL = H2Y.HexTobyte(Ident[16]);
+            ECUs.WSS_RR = H2Y.HexTobyte(Ident[17]);
         }
         public static bool Message_Falg()           //CommunicationControl (0x28)
         {
@@ -5149,10 +5149,10 @@ namespace KI_RnB
 
             if (Ident.Length < 42) return;
 
-            ECUs.WSS_FL = H2Y.HexTobyte(Ident[15]);
-            ECUs.WSS_FR = H2Y.HexTobyte(Ident[16]);
-            ECUs.WSS_RL = H2Y.HexTobyte(Ident[17]);
-            ECUs.WSS_RR = H2Y.HexTobyte(Ident[18]);
+            ECUs.WSS_FL = H2Y.HexTobyte(Ident[14]);
+            ECUs.WSS_FR = H2Y.HexTobyte(Ident[15]);
+            ECUs.WSS_RL = H2Y.HexTobyte(Ident[16]);
+            ECUs.WSS_RR = H2Y.HexTobyte(Ident[17]);
         }
         public static bool Message_Falg()           //CommunicationControl (0x28)
         {
