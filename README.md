@@ -154,23 +154,6 @@
 
 ---
 
-### 6. 현장 확인 필요 사항
-
-| # | 항목 | 확인 방법 |
-|---|------|-----------|
-| 1 | 바코드 100대 후 미인식 해소 | ListBox 제한 적용 후 100대 이상 연속 검사 |
-| 2 | cboModel 드롭다운 닫힘 해소 | 현장에서 드롭다운 수동 선택 시도 |
-| 3 | 에러 로그 확인 | Log File.log의 Error 항목 확인 |
-
-## 배포 시 확인 사항
-
-| 항목 | 개발 PC | 현장 배포 |
-|------|---------|-----------|
-| fom_Main.cs:333 | ~~주석 처리~~ | ABSBoard.Setting() 주석 해제 (완료) |
-| MachineSet.def:125 | ~~OnwerDrv=0~~ | OnwerDrv=1 (완료) |
-| tbl_InfoData | dbStopFlag 추가 완료 | dbStopFlag 컬럼 추가 필요 (텍스트, 기본값 "0") |
-| tbl_CarModel | dbCarBalance 추가 완료 | dbCarBalance 컬럼 추가 필요 (텍스트, 기본값 "N") |
-
 ## LX3 ABS 검사 시퀀스 (33 Steps / 167 sec)
 
 | Phase | 구간 | 주요 내용 | 시스템 |
