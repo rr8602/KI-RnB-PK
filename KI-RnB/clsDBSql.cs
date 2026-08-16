@@ -312,7 +312,7 @@ namespace KI_RnB
     public struct tbl_Info
     {
         public MDB_Sql MDB;
-        const string str_Info = "dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time ";
+        const string str_Info = "dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time, dbStopFlag ";
         
         #region Vehicle Info DB Table - Methods
         public string dbAcceptNo { get; set; }  //측정 벊소
@@ -331,6 +331,7 @@ namespace KI_RnB
         public string dbRun_Time { get; set; }  //진행 시작 시간
         public string dbTestTime { get; set; }  //측정 시각 시간
         public string dbEnd_Time { get; set; }  //종료 시간
+        public string dbStopFlag { get; set; } //종료 상태 (0:정상, 1~:Cancel/Stop)
         #endregion
 
         #region ABS Brake DB Table - Functions
@@ -352,6 +353,7 @@ namespace KI_RnB
             dbRun_Time = "";
             dbTestTime = "";
             dbEnd_Time = "";
+            dbStopFlag = "0";
         }
 
         public DataTable Search(string pDate)
@@ -458,6 +460,7 @@ namespace KI_RnB
                 dbRun_Time = dt.Rows[0]["dbRun_Time"].ToString();
                 dbTestTime = dt.Rows[0]["dbTestTime"].ToString();
                 dbEnd_Time = dt.Rows[0]["dbEnd_Time"].ToString();
+                dbStopFlag = dt.Rows[0]["dbStopFlag"].ToString();
             }
 
             return dt.Rows.Count;
@@ -467,7 +470,7 @@ namespace KI_RnB
         {
             string sql = "INSERT INTO tbl_InfoData ( " + str_Info + " ) values (";
                    sql += string.Format(H2Y.Sql_Insert(str_Info) + ") ",
-                                dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time);
+                                dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time, dbStopFlag);
 
             MDB.Execute(sql);
         }
@@ -475,7 +478,7 @@ namespace KI_RnB
         public void Update(string pAcptNo)
         {
             string sql = string.Format("UPDATE tbl_InfoData SET " + H2Y.Sql_Update(str_Info),
-                                dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time);
+                                dbAcceptNo, dbVin___No, dbCarModel, dbECUModel, dbCarBarID, dbCarEngin, dbCarTranM, dbCar_ABST, dbCarCurve, dbCarDrive, dbCarWbase, dbTestDate, dbRun_Time, dbTestTime, dbEnd_Time, dbStopFlag);
                    sql += string.Format("WHERE dbAcceptNo='{0}'", pAcptNo);
 
             MDB.Execute(sql);

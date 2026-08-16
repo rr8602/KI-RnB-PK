@@ -422,17 +422,25 @@ doc.add_paragraph(
     'OrderStopped()와 타이머 틱에 추가.'
 )
 
-add_heading('6.5 dgv_List 더블클릭 에러 수정', 2)
+add_heading('6.5 dgv_List 더블클릭 에러 및 재진입 방지', 2)
 doc.add_paragraph(
     'CellDoubleClick과 CurrentCellChanged 이벤트가 동시에 SelectResult를 호출하여 '
-    'SetCurrentCellAddressCore 재진입 에러 발생. CellDoubleClick 이벤트 등록 제거.'
+    'SetCurrentCellAddressCore 재진입 에러 발생. CellDoubleClick 이벤트 등록 제거 및 '
+    'SelectResult를 BeginInvoke로 감싸서 DataGridView 셀 변경 완료 후 실행되도록 수정.'
 )
 
-add_heading('6.6 DB 컬럼명 수정 및 기타', 2)
+add_heading('6.6 Cancel/Stop 행 표시 (dbStopFlag)', 2)
+doc.add_paragraph(
+    'tbl_InfoData에 dbStopFlag 컬럼 추가. 검사 종료 시 TSet.StopFlag 값을 DB에 저장. '
+    'dgv_List에서 StopFlag > 0인 행의 VINNO 텍스트를 빨간색으로 표시. '
+    '첫 번째 Info_DataAdd 호출 전 TSet.StopFlag = 0 초기화 추가.'
+)
+
+add_heading('6.8 DB 컬럼명 수정 및 기타', 2)
 add_bullet('', 'dbBalance → dbCarBalance: DB 컬럼명과 코드 일치시킴')
 add_bullet('', 'dgvModel CurrentRow null 체크 추가 (fomSetup dgvModel_CurrentCellChanged)')
 
-add_heading('6.7 cboModel 드롭다운 닫힘 방지', 2)
+add_heading('6.9 cboModel 드롭다운 닫힘 방지', 2)
 doc.add_paragraph(
     '현장 PC에서 cboModel 드롭다운을 열면 목록이 나타났다가 바로 사라지는 현상 대응. '
     'tmr_Main 타이머(300ms)에서 PLC Select 신호 처리 시 cboModel.Text를 변경하면 '
@@ -442,20 +450,20 @@ add_bullet('원인: ', 'PLC Select 신호 → Key_Vehicles() → cboModel.Text �
 add_bullet('수정: ', '!cboModel.DroppedDown 조건 추가. 드롭다운이 열린 동안 PLC Select 처리 지연')
 add_bullet('영향: ', '드롭다운 닫힌 후 다음 틱(0.3초 이내)에서 정상 처리. 패널티 없음')
 
-add_heading('6.8 fomCurve 새 커브 타이틀 표시', 2)
+add_heading('6.10 fomCurve 새 커브 타이틀 표시', 2)
 doc.add_paragraph(
     '새 Driving Curve 생성 시 fomCurve 타이틀바에 모델명이 표시되지 않던 문제 수정. '
     'crv_Mode=1 (새로 만들기) 분기에 this.Text 설정 추가.'
 )
 
-add_heading('6.9 icsNeoClass catch 타입 복원', 2)
+add_heading('6.11 icsNeoClass catch 타입 복원', 2)
 doc.add_paragraph(
     'ConvertFromHex 메서드의 catch가 OverflowException에서 Exception으로 '
     '확대되었던 것을 System.OverflowException으로 복원. '
     'FormatException 등 다른 예외가 삼켜지는 사이드 이펙트 방지.'
 )
 
-add_heading('6.10 배포용 원복 (2건)', 2)
+add_heading('6.12 배포용 원복 (2건)', 2)
 add_table(
     ['항목', '개발 PC', '현장 배포'],
     [

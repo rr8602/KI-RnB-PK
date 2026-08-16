@@ -128,7 +128,8 @@
 - **WSS 파싱 오프셋**: LX3 HEV(iMEB2) `Ident[14~17]`, LX3 ICE(MEB5_1) `Ident[15~18]` (응답 길이 차이)
 - **NRC 0x78 pending 처리**: `clsNeoVI.cs`에서 `7F XX 78` 응답 시 실패 대신 다음 응답 대기. LX3 DTC Clear 시 X 판정 해결
 - **PLC Cancel/Stop 시 VIN 숨김**: 검사 시작 전 Cancel/Stop 시 `FomFlash.VinNo_Hide()` 호출
-- **dgv_List 더블클릭 에러 수정**: `CellDoubleClick` 이벤트 등록 제거 (`CurrentCellChanged`와 재진입 충돌)
+- **dgv_List 더블클릭 에러 수정**: `CellDoubleClick` 이벤트 등록 제거 + `SelectResult`를 `BeginInvoke`로 재진입 방지
+- **Cancel/Stop 행 표시**: `tbl_InfoData`에 `dbStopFlag` 컬럼 추가, Cancel/Stop 종료 시 StopFlag 저장, dgv_List에서 해당 행 VINNO 빨간색 표시
 - **DB 컬럼명**: `dbBalance` → `dbCarBalance`로 DB 컬럼명과 일치하도록 수정
 - **dgvModel CurrentRow null 체크**: fomSetup `dgvModel_CurrentCellChanged`에서 CurrentRow null 체크 추가
 - **cboModel 드롭다운**: PLC Select 처리 시 `!cboModel.DroppedDown` 체크 추가
@@ -165,8 +166,10 @@
 
 | 항목 | 개발 PC | 현장 배포 |
 |------|---------|-----------|
-| fom_Main.cs:322 | ~~주석 처리~~ | ABSBoard.Setting() 주석 해제 (완료) |
+| fom_Main.cs:333 | ~~주석 처리~~ | ABSBoard.Setting() 주석 해제 (완료) |
 | MachineSet.def:125 | ~~OnwerDrv=0~~ | OnwerDrv=1 (완료) |
+| tbl_InfoData | dbStopFlag 추가 완료 | dbStopFlag 컬럼 추가 필요 (텍스트, 기본값 "0") |
+| tbl_CarModel | dbCarBalance 추가 완료 | dbCarBalance 컬럼 추가 필요 (텍스트, 기본값 "N") |
 
 ## LX3 ABS 검사 시퀀스 (33 Steps / 167 sec)
 

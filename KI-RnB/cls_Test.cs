@@ -427,6 +427,7 @@ namespace KI_RnB
             main.DB_All.DB_Info.dbRun_Time = TSet.Run_Time;
             main.DB_All.DB_Info.dbTestTime = TSet.TestTime;
             main.DB_All.DB_Info.dbEnd_Time = TSet.End_Time;
+            main.DB_All.DB_Info.dbStopFlag = TSet.StopFlag.ToString();
 
             if (count > 0)
             {

@@ -248,6 +248,7 @@ namespace KI_RnB
             public bool PC__Start { get; set; } //D562[10] VEHICLE START PC
             public bool PC___Stop { get; set; } //D562[11] VEHICLE STOP PC
             public bool PC_Cancel { get; set; } //D562[12] VEHICLE CANCEL PC
+            public bool Vehicle_Balance { get; set; } //D562[13] Vehicle Balance
 
             public bool PC_StadBy { get; set; } //D562[14] 운전준비 PC
             public bool PC__Reset { get; set; } //D562[15] 모터컨트롤러 리세트 PC
@@ -1156,7 +1157,7 @@ namespace KI_RnB
             DOB562[10] = DO.PC__Start;  //D562[10] VEHICLE START PC
             DOB562[11] = DO.PC___Stop;  //D562[11] VEHICLE STOP PC
             DOB562[12] = DO.PC_Cancel;  //D562[12] VEHICLE CANCEL PC
-          //DOB562[13]
+            DOB562[13] = DO.Vehicle_Balance; //D562[13] VEHICLE BALANCE PC
             DOB562[14] = DO.PC_StadBy;  //D562[14] 운전준비 PC
             DOB562[15] = DO.PC__Reset;  //D562[15] 모터컨트롤러 리세트 PC
         }

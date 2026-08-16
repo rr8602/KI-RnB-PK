@@ -236,7 +236,7 @@ namespace KI_RnB
             System.Windows.Forms.DataGridViewCellStyle CellStyle = new System.Windows.Forms.DataGridViewCellStyle();
             CellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
 
-            if (dgv_List.Columns.Count == 15)
+            if (dgv_List.Columns.Count == 16)
             {
                 dgv_List.Columns[0].DefaultCellStyle = CellStyle;
                 dgv_List.Columns[1].DefaultCellStyle = CellStyle;
@@ -269,6 +269,17 @@ namespace KI_RnB
                 dgv_List.Columns[12].HeaderText = PSet.LangMain[49]; //"Start Time";
                 dgv_List.Columns[13].HeaderText = PSet.LangMain[50]; //"Test Time";
                 dgv_List.Columns[14].HeaderText = PSet.LangMain[51]; //"End Time";
+                dgv_List.Columns[15].Visible = false;              //dbStopFlag 숨김
+
+                //Cancel/Stop 종료 행의 VINNO 빨간색 표시
+                for (int i = 0; i < dgv_List.Rows.Count; i++)
+                {
+                    string flag = dgv_List.Rows[i].Cells[15].Value?.ToString();
+                    if (flag != "" && flag != "0")
+                    {
+                        dgv_List.Rows[i].Cells[1].Style.ForeColor = Color.Red;
+                    }
+                }
             }
             //if (dgv_List.Rows.Count > 1)
             //{
@@ -717,7 +728,7 @@ namespace KI_RnB
                 SelectRow = dgv_List.CurrentRow.Index;
                 string AcptNo = dgv_List[0, SelectRow].Value.ToString();
 
-                SelectResult(AcptNo);     
+                BeginInvoke(new Action(() => SelectResult(AcptNo)));  //재진입 방지
             }
         }
         private void dgv_List_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -1012,6 +1023,7 @@ namespace KI_RnB
                 if (Test_Standby())
                 {
                     FomFlash.VinNo_Hide();
+                    TSet.StopFlag = 0;                                     //이전 테스트 StopFlag 잔존값 초기화
                     TSet.Info_DataAdd(this);                                //Info 생성
                     PSet.Test_CNTRead();                                    //카운터 확인
                     Test = new cls_Test(this);                              //측정 생성
