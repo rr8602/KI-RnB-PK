@@ -1,6 +1,6 @@
 # KI-RnB Pakistan (HNMPL) - LX3 HEV/ICE
 
-파키스탄 HNMPL 공장 ABS/ESC 롤러벤치 검사 프로그램
+파키스탄 HNMPL 공장 ABS 롤러벤치 검사 프로그램
 
 ## 프로젝트 정보
 
