@@ -456,7 +456,21 @@ doc.add_paragraph(
     'crv_Mode=1 (새로 만들기) 분기에 this.Text 설정 추가.'
 )
 
-add_heading('6.11 icsNeoClass catch 타입 복원', 2)
+add_heading('6.11 CAN 멀티프레임 Return 설정', 2)
+doc.add_paragraph(
+    'STD_CAN_Read() First Frame 핸들러에서 긍정응답(GetD[2] != "7F") 시 '
+    'Return = true 설정 누락 수정. HEV DTC Read가 멀티프레임으로 수신되면서 '
+    'Return이 미설정되어 X 판정되던 문제 해결. ICE는 싱글프레임이라 영향 없었음.'
+)
+
+add_heading('6.12 바코드 자릿수 검증', 2)
+doc.add_paragraph(
+    '바코드 스캔 시 자릿수 검증 및 DB 매칭 실패 시 팝업 표시 추가. '
+    '9자리 미만: too short 팝업, 17자리 초과: too long 팝업, '
+    'DB 매칭 실패(Count=0): 스캔값 표시 및 Setting 확인 안내.'
+)
+
+add_heading('6.13 icsNeoClass catch 타입 복원', 2)
 doc.add_paragraph(
     'ConvertFromHex 메서드의 catch가 OverflowException에서 Exception으로 '
     '확대되었던 것을 System.OverflowException으로 복원. '

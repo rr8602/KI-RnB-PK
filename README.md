@@ -134,6 +134,8 @@
 - **dgvModel CurrentRow null 체크**: fomSetup `dgvModel_CurrentCellChanged`에서 CurrentRow null 체크 추가
 - **cboModel 드롭다운**: PLC Select 처리 시 `!cboModel.DroppedDown` 체크 추가
 - **fomCurve 타이틀**: 새 커브 생성 시 타이틀바에 모델명 표시
+- **CAN 멀티프레임 Return 설정**: `STD_CAN_Read()` First Frame 핸들러에서 긍정응답 시 `Return = true` 누락 수정. HEV DTC Read X 판정 해결
+- **바코드 자릿수 검증**: 9자리 미만/17자리 초과 시 팝업 표시, DB 매칭 실패 시 스캔값 표시
 - **icsNeoClass**: ConvertFromHex catch 타입 OverflowException 유지
 
 ---

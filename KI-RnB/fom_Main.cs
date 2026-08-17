@@ -1593,12 +1593,23 @@ namespace KI_RnB
 
         private void SelModelList(string pVinNo)
         {
+            if (pVinNo.Length < 9)
+            {
+                FomFlash.VinNo_Show("ERROR", pVinNo);
+                txtVinNo.Text = "";
+                cboModel.Text = "";
+                Prog_LogData("Barcode Digit Error (too short: " + pVinNo.Length + ")");
+                MessageBoxEx.Show("Barcode too short.\nScanned : " + pVinNo + " (" + pVinNo.Length + " chars)\nRequired : 9 chars minimum.");
+                return;
+            }
+
             if (pVinNo.Length > 17)
             {
                 FomFlash.VinNo_Show("ERROR", pVinNo);
                 txtVinNo.Text = "";
                 cboModel.Text = "";
-                Prog_LogData("Barcode Digit Error");
+                Prog_LogData("Barcode Digit Error (too long: " + pVinNo.Length + ")");
+                MessageBoxEx.Show("Barcode too long.\nScanned : " + pVinNo + " (" + pVinNo.Length + " chars)\nRequired : 17 chars maximum.");
                 return;
             }
 
@@ -1622,7 +1633,11 @@ namespace KI_RnB
                 cboModel.Text = "";
                 Prog_LogData("Barcode Compare Error");
 
-                if (Count > 1)
+                if (Count == 0)
+                {
+                    MessageBoxEx.Show("Barcode not found.\nScanned : " + pVinNo.Substring(0, 9) + "\nCheck Vehicle ID in Setting.");
+                }
+                else if (Count > 1)
                 {
                     MessageBoxEx.Show("Barcode model Counter : " + Count);
                 }

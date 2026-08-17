@@ -722,7 +722,10 @@ namespace KI_RnB
                                     {
                                         Return = false;
                                     }
-                                   
+                                    else
+                                    {
+                                        Return = true;  //멀티프레임 긍정응답
+                                    }
 
                                     CAN_Transmit("30 00 0A");
                                     break;
