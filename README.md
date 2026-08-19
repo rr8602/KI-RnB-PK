@@ -140,6 +140,51 @@
 
 ---
 
+### 2026-08-19 — CAN 멀티프레임 WSS 데이터 밀림 수정 및 교정 방어 코드
+
+---
+
+### 1. CAN 멀티프레임 Get_Data 인덱스 밀림 수정 (clsNeoVI.cs)
+
+`Ret_SendMsgs`에서 multi-frame 응답 수신 시, First Frame에서 `Return = true`로 즉시 탈출하면서 CF(Consecutive Frame)가 NeoVI 버퍼에 잔류. 다음 호출 시 `ECU_Clear()`가 `FF_0 = ""`로 초기화한 상태에서 잔류 CF가 먼저 처리되어 Get_Data 인덱스가 6칸 밀리는 문제 수정.
+
+- **증상**: WSS 값이 255, 203, 127, 255로 표시 (실제 속도값 대신 다른 센서 데이터가 읽힘)
+- **원인**: First Frame 처리(case "1")에서 `FF_0`를 세팅한 후 `Get_Data`를 재조립하지 않아, CF 처리(case "2")에서 `FF_0=""`로 조립된 데이터가 그대로 사용됨
+- **수정**: First Frame 처리 시 `FF_0` 세팅 직후 `Get_Data`를 재조립하는 코드 추가
+- **영향 차종**: 전 차종 공통 (AD, DN8, TL, TM, HEV, LX3 등)
+
+### 2. Load 교정 방어 코드 (fom_Load.cs)
+
+| 위치 | 내용 |
+|------|------|
+| tmr_Cals_Tick | `Pedal.IsOpen == false` → MessageBox: "Indicator is not connected." → 교정 진행 안 함 |
+| tmr_Cals_Tick | `TSet.Bongshin == 0` → MessageBox: "Indicator value is 0." → 교정 진행 안 함 |
+| LoadDataSave | `time * (DiaM / 2) == 0` 방어: divisor 체크 후 0이면 Calc = 0 처리 |
+
+### 3. Loss 교정 방어 코드 (fom_Loss.cs)
+
+| 위치 | 내용 |
+|------|------|
+| Set2_Point | `RPM__1 == RPM__2` → MessageBox: "RPM values are identical." (1회) → return |
+| Calibrations | `rpmErrorShown = false` 초기화 (재교정 시 플래그 리셋) |
+| Aver_LogLoss | `count++` 누락 버그 수정 + `SpdS > 0` 조건 추가로 유효 항목만 카운트 |
+
+### 4. 실시간 측정 방어 코드 (clsDAQmx.cs)
+
+| 위치 | 내용 |
+|------|------|
+| Wheel_Loss | `Dia / 2 == 0` → BeginInvoke MessageBox: "Roller diameter is 0." (1회) → return |
+| Wheel_Loss | `Load.Indi == 0` → BeginInvoke MessageBox: "Load calibration data is invalid." (1회) + 무보정 처리 |
+
+> BeginInvoke 사용 이유: `Wheel_Loss`는 백그라운드 스레드(NIDAQmx_Run)에서 호출되므로 UI 스레드에 위임
+
+### 5. 기타
+
+- **clsBS205.cs**: `Main?.Prog_LogData` null-conditional 연산자 적용
+- **배포용 원복**: `ABSBoard.Setting` 주석 해제, `OnwerDrv=1`
+
+---
+
 ### 5. 사이드 이펙트 검증
 
 | 항목 | 결과 |

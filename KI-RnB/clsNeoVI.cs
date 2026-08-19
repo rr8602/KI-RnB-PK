@@ -728,6 +728,25 @@ namespace KI_RnB
                                     }
 
                                     CAN_Transmit("30 00 0A");
+
+                                    //이전 응답의 CF가 버퍼에 남아있을 경우, FF_0 갱신 후 Get_Data 재조립
+                                    Get_Data = FF_0;
+                                    if (CF_1 != "") Get_Data = Get_Data + " " + CF_1;
+                                    if (CF_2 != "") Get_Data = Get_Data + " " + CF_2;
+                                    if (CF_3 != "") Get_Data = Get_Data + " " + CF_3;
+                                    if (CF_4 != "") Get_Data = Get_Data + " " + CF_4;
+                                    if (CF_5 != "") Get_Data = Get_Data + " " + CF_5;
+                                    if (CF_6 != "") Get_Data = Get_Data + " " + CF_6;
+                                    if (CF_7 != "") Get_Data = Get_Data + " " + CF_7;
+                                    if (CF_8 != "") Get_Data = Get_Data + " " + CF_8;
+                                    if (CF_9 != "") Get_Data = Get_Data + " " + CF_9;
+                                    if (CF_A != "") Get_Data = Get_Data + " " + CF_A;
+                                    if (CF_B != "") Get_Data = Get_Data + " " + CF_B;
+                                    if (CF_C != "") Get_Data = Get_Data + " " + CF_C;
+                                    if (CF_D != "") Get_Data = Get_Data + " " + CF_D;
+                                    if (CF_E != "") Get_Data = Get_Data + " " + CF_E;
+                                    if (CF_F != "") Get_Data = Get_Data + " " + CF_F;
+
                                     break;
                                     #endregion
                                 case "2":

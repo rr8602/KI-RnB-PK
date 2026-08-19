@@ -738,8 +738,10 @@ namespace KI_RnB
             }
         }
 
-        private void Calibrations() 
+        private void Calibrations()
         {
+            rpmErrorShown = false;
+
             long ReadTick;
             double ReadTime = 0;
             double Gap_Time = 0;
@@ -1326,6 +1328,8 @@ namespace KI_RnB
             return wheel;
         }
 
+        private bool rpmErrorShown = false;
+
         private TSet.wheel_Loss Set2_Point(TSet.wheel_Loss wheel, NI.Wheel scan)
         {
             double imsi_M, imsi_B;
@@ -1336,6 +1340,17 @@ namespace KI_RnB
                 wheel.Speed2 = scan.Speed;
                 wheel.Force2 = scan.Force;
                 wheel.Kgf__2 = scan.Kgf;
+
+                if (wheel.RPM__1 == wheel.RPM__2)
+                {
+                    if (!rpmErrorShown)
+                    {
+                        rpmErrorShown = true;
+                        MessageBox.Show("RPM values are identical. Unable to calculate loss slope.\nPlease check roller speed and try again.",
+                            "Calibration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    return wheel;
+                }
 
                 imsi_M= (wheel.Force1 - wheel.Force2) / (wheel.RPM__1 - wheel.RPM__2);
                 imsi_B = wheel.Force1 - (wheel.Loss_M * wheel.RPM__1);
@@ -1676,14 +1691,18 @@ namespace KI_RnB
 
             for (int cnt = 0; cnt < Roll.Item.Length; cnt++)
             {
-                spdS += Roll.Item[cnt].SpdS;
-                spdE += Roll.Item[cnt].SpdE;
-                rpmS += Roll.Item[cnt].RpmS;
-                rpmE += Roll.Item[cnt].RpmE;
-                time += Roll.Item[cnt].Time;
-                chkM += Roll.Item[cnt].ChkM;
-                chkB += Roll.Item[cnt].ChkB;
-                loss += Roll.Item[cnt].Loss;
+                if (Roll.Item[cnt].SpdS > 0)
+                {
+                    spdS += Roll.Item[cnt].SpdS;
+                    spdE += Roll.Item[cnt].SpdE;
+                    rpmS += Roll.Item[cnt].RpmS;
+                    rpmE += Roll.Item[cnt].RpmE;
+                    time += Roll.Item[cnt].Time;
+                    chkM += Roll.Item[cnt].ChkM;
+                    chkB += Roll.Item[cnt].ChkB;
+                    loss += Roll.Item[cnt].Loss;
+                    count++;
+                }
             }
 
             if (count > 0)

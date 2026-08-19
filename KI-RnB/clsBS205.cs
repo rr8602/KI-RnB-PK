@@ -97,7 +97,7 @@ namespace KI_RnB
             {
                 //System.Windows.Forms.MessageBox.Show(ex.Message);
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-                Main.Prog_LogData(ex.Message);
+                Main?.Prog_LogData(ex.Message);
                 IsOpen = false;
             }
 

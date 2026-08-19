@@ -41,7 +41,7 @@ namespace KI_RnB
         {
             InitializeComponent();
 
-            BS205 = new clsBS205(this.Owner);
+            BS205 = new clsBS205();
 
             #region Ranguage
             if (PSet.OwnerS00 > PSet.Def_Lang)
@@ -573,13 +573,26 @@ namespace KI_RnB
             PLC.DO.CalAirSol = false;
             PLC.DO.CalIndi_O = false; PLC.PLC_312_Puts(); //D312
 
-            try
+            if (!Fom_Main.Pedal.IsOpen)
             {
-                Calibrations();
+                MessageBox.Show("Indicator is not connected.\nPlease check the indicator connection and try again.",
+                    "Indicator Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            catch (Exception ex)
+            else if (TSet.Bongshin == 0)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Indicator value is 0.\nPlease check the indicator and apply the reference load before calibration.",
+                    "Indicator Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                try
+                {
+                    Calibrations();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
 
             StartOnf = false;
@@ -875,7 +888,8 @@ namespace KI_RnB
             double RPM1 = start * 2 * Math.PI / 60;
             double RPM2 = end * 2 * Math.PI / 60;
             double RPM3 = (RPM1 - RPM2) * Moment;
-            double Calc = RPM3 / (time * (DiaM / 2)) / 1000 / PSet.NewTGain;
+            double divisor = time * (DiaM / 2);
+            double Calc = (divisor != 0 && PSet.NewTGain != 0) ? RPM3 / divisor / 1000 / PSet.NewTGain : 0;
 
             load.Item[idx].SpdS = start;
             load.Item[idx].SpdE = end;

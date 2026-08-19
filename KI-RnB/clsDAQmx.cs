@@ -457,6 +457,9 @@ namespace KI_RnB
             return Axle;
         }
 
+        private static bool DiaErrorShown = false;
+        private static bool IndiErrorShown = false;
+
         private static Wheel Wheel_Loss(Scan_Data kind, Wheel wheel, long ENC, int pulse, int Dia, double Moment, Loss_Items Loss, Load_Items Load)
         {
             wheel.GapT = ReadTime - wheel.oldT; 
@@ -554,12 +557,44 @@ namespace KI_RnB
             wheel.RPM_1 = wheel.RPM_0;  wheel.Now_1 = wheel.Now_0;
             wheel.RPM_0 = RPM;          wheel.Now_0 = ReadTime;
 
+            if (Dia / 2 == 0)
+            {
+                if (!DiaErrorShown)
+                {
+                    DiaErrorShown = true;
+                    Form mainForm = Application.OpenForms.Count > 0 ? Application.OpenForms[0] : null;
+                    if (mainForm != null)
+                    {
+                        mainForm.BeginInvoke(new Action(() =>
+                        {
+                            MessageBox.Show("Roller diameter is 0. Unable to calculate force.\nPlease check roller diameter setting.",
+                                "Setting Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }));
+                    }
+                }
+                return wheel;
+            }
+
             wheel.Factor = Moment / (Dia / 2) / 1000 / PSet.NewTGain;
             wheel.Loss = ((wheel.RPM * Loss.ChkM) + Loss.ChkB) / 1000 / PSet.NewTGain;
             wheel.Force = (wheel.Accel * Moment) / (Dia / 2) - wheel.Loss;
             wheel.Calc = -(wheel.Force / 1000 / PSet.NewTGain);
 
-            double add = ((Load.Indi - Load.Calc) / Load.Indi);
+            if (Load.Indi == 0 && !IndiErrorShown)
+            {
+                IndiErrorShown = true;
+                Form mainForm = Application.OpenForms.Count > 0 ? Application.OpenForms[0] : null;
+                if (mainForm != null)
+                {
+                    mainForm.BeginInvoke(new Action(() =>
+                    {
+                        MessageBox.Show("Load calibration data is invalid (Indicator = 0).\nPlease perform Load calibration first.",
+                            "Calibration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }));
+                }
+            }
+
+            double add = (Load.Indi != 0) ? ((Load.Indi - Load.Calc) / Load.Indi) : 0;
             double kgf = (wheel.Calc * add) + wheel.Calc;
             wheel.Kgf = (wheel.oKgf + kgf) / 2;   //H2Y.QAver_Filter(kind.kgf_Aver, kgf, wheel.Q_kgf); 
 
