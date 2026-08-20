@@ -11,11 +11,12 @@ namespace KI_RnB
 {
     public static class NeoVI
     {
+        private static StringBuilder Get_Buf = new StringBuilder();
         private static IntPtr m_hObject;		 //handle for device
         private static OptionsNeoEx neoDeviceOption = new OptionsNeoEx();
         private static int iOpenDeviceType; //Storage for the device type that is open
         private static icsSpyMessage[] stMessages = new icsSpyMessage[20000];   //TempSpace for messages
-        private static string FF_0, CF_1, CF_2, CF_3, CF_4, CF_5, CF_6, CF_7, CF_8, CF_9, CF_A, CF_B, CF_C, CF_D, CF_E, CF_F;
+        //private static string FF_0, CF_1, CF_2, CF_3, CF_4, CF_5, CF_6, CF_7, CF_8, CF_9, CF_A, CF_B, CF_C, CF_D, CF_E, CF_F;
         private static string Put_Time, Put_Head, Put_Olds;
         private static string Get_Time, Get_Head, Get_Olds;
         private static Thread thread_NeoVI;
@@ -66,13 +67,10 @@ namespace KI_RnB
         {
             IsRead = false;
             Send_Key = "";
+            CAN_Len = 0;                                                  // 추가
             Put_Time = ""; Put_Head = ""; Put_Data = ""; Put_Olds = "";
             Get_Time = ""; Get_Head = ""; Get_Data = ""; Get_Olds = "";
-
-            FF_0 = ""; CF_1 = ""; CF_2 = ""; CF_3 = ""; CF_4 = ""; CF_5 = ""; CF_6 = ""; CF_7 = "";
-            CF_8 = ""; CF_9 = ""; CF_A = ""; CF_B = ""; CF_C = ""; CF_D = ""; CF_E = ""; CF_F = "";
-
-            //Device_Read();
+            Get_Buf.Length = 0;                                            // FF_0 / CF_1~CF_F 대체
         }
 
         public static void Setting(fom_Main main)
@@ -715,83 +713,20 @@ namespace KI_RnB
                                     #endregion
                                 case "1":
                                     #region First  Frame (FF)
-                                    FF_0 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7];
                                     CAN_Len = Convert.ToInt32(GetD[0].Substring(1, 1) + GetD[1], 16);
-
-                                    if (GetD[2] == "7F")
-                                    {
-                                        Return = false;
-                                    }
-                                    else
-                                    {
-                                        Return = true;  //멀티프레임 긍정응답
-                                    }
-
+                                    Get_Buf.Length = 0;
+                                    Get_Buf.Append(GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]);
+                                    Get_Data = Get_Buf.ToString();
+                                    if (GetD[2] == "7F") { Return = false; }
                                     CAN_Transmit("30 00 0A");
-
-                                    //이전 응답의 CF가 버퍼에 남아있을 경우, FF_0 갱신 후 Get_Data 재조립
-                                    Get_Data = FF_0;
-                                    if (CF_1 != "") Get_Data = Get_Data + " " + CF_1;
-                                    if (CF_2 != "") Get_Data = Get_Data + " " + CF_2;
-                                    if (CF_3 != "") Get_Data = Get_Data + " " + CF_3;
-                                    if (CF_4 != "") Get_Data = Get_Data + " " + CF_4;
-                                    if (CF_5 != "") Get_Data = Get_Data + " " + CF_5;
-                                    if (CF_6 != "") Get_Data = Get_Data + " " + CF_6;
-                                    if (CF_7 != "") Get_Data = Get_Data + " " + CF_7;
-                                    if (CF_8 != "") Get_Data = Get_Data + " " + CF_8;
-                                    if (CF_9 != "") Get_Data = Get_Data + " " + CF_9;
-                                    if (CF_A != "") Get_Data = Get_Data + " " + CF_A;
-                                    if (CF_B != "") Get_Data = Get_Data + " " + CF_B;
-                                    if (CF_C != "") Get_Data = Get_Data + " " + CF_C;
-                                    if (CF_D != "") Get_Data = Get_Data + " " + CF_D;
-                                    if (CF_E != "") Get_Data = Get_Data + " " + CF_E;
-                                    if (CF_F != "") Get_Data = Get_Data + " " + CF_F;
-
                                     break;
                                     #endregion
                                 case "2":
                                     #region Consecutive Frame (CF)
-                                    switch (GetD[0])
-                                    {
-                                        case "21": CF_1 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "22": CF_2 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "23": CF_3 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "24": CF_4 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "25": CF_5 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "26": CF_6 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "27": CF_7 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "28": CF_8 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "29": CF_9 = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2A": CF_A = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2B": CF_B = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2C": CF_C = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2D": CF_D = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2E": CF_E = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                        case "2F": CF_F = GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]; break;
-                                    }
-
-                                    Get_Data = FF_0;
-                                    if (CF_1 != "") Get_Data = Get_Data + " " + CF_1;
-                                    if (CF_2 != "") Get_Data = Get_Data + " " + CF_2;
-                                    if (CF_3 != "") Get_Data = Get_Data + " " + CF_3;
-                                    if (CF_4 != "") Get_Data = Get_Data + " " + CF_4;
-                                    if (CF_5 != "") Get_Data = Get_Data + " " + CF_5;
-                                    if (CF_6 != "") Get_Data = Get_Data + " " + CF_6;
-                                    if (CF_7 != "") Get_Data = Get_Data + " " + CF_7;
-                                    if (CF_8 != "") Get_Data = Get_Data + " " + CF_8;
-                                    if (CF_9 != "") Get_Data = Get_Data + " " + CF_9;
-                                    if (CF_A != "") Get_Data = Get_Data + " " + CF_A;
-                                    if (CF_B != "") Get_Data = Get_Data + " " + CF_B;
-                                    if (CF_C != "") Get_Data = Get_Data + " " + CF_C;
-                                    if (CF_D != "") Get_Data = Get_Data + " " + CF_D;
-                                    if (CF_E != "") Get_Data = Get_Data + " " + CF_E;
-                                    if (CF_F != "") Get_Data = Get_Data + " " + CF_F;
-
-                                    if (CAN_Len <= Ret_Length(Get_Data))
-                                    {
-                                        Return = true;
-                                    }
-
+                                    if (Get_Buf.Length == 0) break;                 // FF 없이 온 CF = 잔재, 폐기
+                                    Get_Buf.Append(" " + GetD[1] + " " + GetD[2] + " " + GetD[3] + " " + GetD[4] + " " + GetD[5] + " " + GetD[6] + " " + GetD[7]);
+                                    Get_Data = Get_Buf.ToString();
+                                    if (Ret_Length(Get_Data) - 1 >= CAN_Len) { Return = true; }
                                     break;
                                     #endregion
 
@@ -1162,6 +1097,7 @@ namespace KI_RnB
             double OfstTime = DateTime.Now.Ticks;
             double Gap_Time = 1;
             double Gap_Ofst = 0;
+            int Old_Len = 0;
             bool TestFlag = false;
             bool Key_Pass = false;
             bool old_Pass = false;
@@ -1199,6 +1135,7 @@ namespace KI_RnB
                 if (Key_Pass != old_Pass) { old_Pass = Key_Pass; }
                 #endregion
 
+                if (Get_Buf.Length != Old_Len) { Old_Len = Get_Buf.Length; Gap_Ofst = ReadTime; }
                 if (Return) { Ret = true; break; }
                 if (ReadTime - Gap_Ofst > Gap_Time) { Ret = false; break; }
 

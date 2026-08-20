@@ -201,6 +201,52 @@
 
 ---
 
+### 2026-08-20 — ISO-TP 멀티프레임 CF 버퍼 구조 개선 (clsNeoVI.cs)
+
+---
+
+### 1. 증상
+
+| 증상 | 차종 | 내용 |
+|------|------|------|
+| A | NX4 PE HEV (IDB2, 7E7/7EF) | ECU Identification 간헐 에러. CF 수신 중 다음 요청이 버스에 실림 → ECU 무시 → 타임아웃 |
+| B | LX3 HEV | DTC Read 화면 X. 통신 정상이나 응답 조립 실패로 완료 판정 안 됨 |
+
+### 2. 원인
+
+CF(Consecutive Frame) 버퍼가 `CF_1`~`CF_F` 15칸 고정이고, `switch`에 `case "20"`이 없었음.
+
+ISO-TP SN(Sequence Number)은 4비트(0~F)라 `21`…`2F` 다음 `20`으로 순환. 16번째 CF(SN=0)가 어느 case에도 안 걸려 폐기 → 17번째 CF(SN=1)가 `CF_1`을 덮어씀 → 응답이 약 111바이트(DTC 27개)를 넘으면 `Get_Data`가 `CAN_Len`에 도달 불가 → 증상 B.
+
+이를 우회하려고 FF 분기에 `else { Return = true; }` 추가 → FF만 받으면 성공 판정 → CF 수신 전 대기 루프 탈출 → 증상 A.
+
+**부수 결함**: 완료 판정 off-by-one (Get_Buf 첫 토큰이 FF_DL 하위바이트라 토큰 수가 항상 1 많음), Gap_Ofst 미사용으로 타임아웃 "요청 후 1초" 고정 (LX3 HEV 응답 2초에 잘림).
+
+### 3. 수정 내용
+
+| # | 내용 | 상세 |
+|---|------|------|
+| ① | CF 버퍼 구조 변경 | `FF_0`/`CF_1`~`CF_F` 16개 필드 → `StringBuilder Get_Buf` 1개. SN 인덱스 없이 순서대로 Append |
+| ② | FF 분기 수정 | `else { Return = true; }` 제거. FF는 수신 시작일 뿐, 완료 판정은 CF 분기로 단일화 |
+| ③ | CF 분기 수정 | SN별 switch 제거 → 무조건 Append. `Ret_Length(Get_Data) - 1 >= CAN_Len`으로 완료 판정 (-1은 FF_DL 토큰 보정) |
+| ④ | ECU_Clear() | `CAN_Len = 0` 추가, `Get_Buf.Length = 0`으로 버퍼 초기화 |
+| ⑤ | Ret_SendMsgs() 타임아웃 | `Gap_Ofst`를 `Get_Buf.Length` 변화 시마다 갱신 → "마지막 프레임 후 1초"로 변경 (N_Cr 개념) |
+
+### 4. 실측 데이터
+
+| 차종 | 응답 크기 | CF 개수 | DTC 개수 | 소요 시간 |
+|------|-----------|---------|----------|-----------|
+| LX3 ICE | 151 byte | 21개 | 37개 | — |
+| LX3 HEV | 1,159 byte (FF_DL 0x487) | 165개 | 289개 | 2.0초 |
+| NX4 C101 | 42 byte | 6개 | — | 0.1초 |
+
+### 5. 검증
+
+- **NX4 PE HEV**: 통과 (ECU 통신 전 항목 정상)
+- **LX3 ICE / LX3 HEV**: 미실시 (코드 리뷰 완료)
+
+---
+
 ## LX3 ABS 검사 시퀀스 (33 Steps / 167 sec)
 
 | Phase | 구간 | 주요 내용 | 시스템 |
