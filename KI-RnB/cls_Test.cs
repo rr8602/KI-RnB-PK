@@ -2405,6 +2405,69 @@ Retest_COMMUNICATION:
 
             if (TSet.ECU_Flag && TSet.ECU_Setp == 12)
             {
+                if (ECUs.ECU == ECUs.Mobis_LX3H || ECUs.ECU == ECUs.Mobis_LX3I)
+                {
+                    Ret = ECUs.Dynamic_Step(6);
+                    TSet.ECU_Setp = 13; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+                }
+                else
+                {
+                    ECUs.ABS_Step = 5;
+                }
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 13)
+            {
+                if (TSet.ECU_Time - TSet.ECU_oldT > H2Y.DVD(T2, 1000))
+                {
+                    TSet.ECU_Setp = 14; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+                }
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 14)
+            {
+                Ret = ECUs.Dynamic_Step(7);
+                TSet.ECU_Setp = 15; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 15)
+            {
+                if (TSet.ECU_Time - TSet.ECU_oldT > H2Y.DVD(T2, 1000))
+                {
+                    TSet.ECU_Setp = 16; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+                }
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 16)
+            {
+                Ret = ECUs.Dynamic_Step(8);
+                TSet.ECU_Setp = 17; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 17)
+            {
+                if (TSet.ECU_Time - TSet.ECU_oldT > H2Y.DVD(T2, 1000))
+                {
+                    TSet.ECU_Setp = 18; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+                }
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 18)
+            {
+                Ret = ECUs.Dynamic_Step(9);
+                TSet.ECU_Setp = 19; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 19)
+            {
+                if (TSet.ECU_Time - TSet.ECU_oldT > H2Y.DVD(T3, 1000))
+                {
+                    TSet.ECU_Setp = 20; TSet.ECU_Flag = false; TSet.ECU_oldT = TSet.ECU_Time;
+                }
+            }
+
+            if (TSet.ECU_Flag && TSet.ECU_Setp == 20)
+            {
                 ECUs.ABS_Step = 5;
             }
 

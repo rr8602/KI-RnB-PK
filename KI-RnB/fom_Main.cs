@@ -52,6 +52,8 @@ namespace KI_RnB
 
         string Porg_Msg = "";
         public Chery_TestPresentThread CheryEchoThread;
+        private System.Timers.Timer TpTimer;
+        public void SendTP(bool bSend) { TpTimer.Enabled = bSend; }
         public fom_Main()
         {
             InitializeComponent();
@@ -172,6 +174,10 @@ namespace KI_RnB
 
             CheryEchoThread = new Chery_TestPresentThread();
             CheryEchoThread.StartThread();
+
+            TpTimer = new System.Timers.Timer(500);
+            TpTimer.Elapsed += (s, ev) => NeoVI.CAN_Transmit("3E 80");
+            TpTimer.AutoReset = true;
 
         }
 
@@ -877,6 +883,7 @@ namespace KI_RnB
             PSet.Onf_Prog = false;
             NeoVI.Device_Close();
             CheryEchoThread.Terminate();
+            TpTimer.Stop();
             try
             {
                 foreach (Form fom in OwnedForms)
@@ -1009,8 +1016,10 @@ namespace KI_RnB
             cls_Data Standard = new cls_Data(this);
             TSet.CarParam = Standard.Sel_Parameter(TSet.CarModel);
             CheryEchoThread.SendEcho(false);
+            SendTP(false);
             if (TSet.CarParam != "")
             {
+                if (ECUs.ECU != ECUs.Chery_1box) { SendTP(true); }
                 TSet.TestDate = Now_Date;                           //측정 일자
                 TSet.Run_Time = DateTime.Now.ToString(H2Y.format0Time);  //진행 시작 시간
                 //TSet.TestTime = DateTime.Now.ToString(H2Y.format0Time);  //측정 시각 시간
@@ -1080,6 +1089,7 @@ namespace KI_RnB
             TSet.Test_Run = false;
             Control_State(true);
             CheryEchoThread.SendEcho(false);
+            SendTP(false);
         }
 
         private bool Test_Standby() //측정 정보 확인
@@ -1122,6 +1132,7 @@ namespace KI_RnB
         {
             TSet.TestStop = true;
             CheryEchoThread.SendEcho(false);
+            SendTP(false);
             FomFlash.VinNo_Hide();
             Prog_LogData("Program STOP Button");
         }
