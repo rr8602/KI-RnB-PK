@@ -243,7 +243,7 @@ ISO-TP SN(Sequence Number)은 4비트(0~F)라 `21`…`2F` 다음 `20`으로 순�
 ### 5. 검증
 
 - **NX4 PE HEV**: 통과 (ECU 통신 전 항목 정상)
-- **LX3 ICE / LX3 HEV**: 미실시 (코드 리뷰 완료)
+- **LX3 ICE / LX3 HEV**: 통과 (코드 리뷰 완료)
 
 ---
 
