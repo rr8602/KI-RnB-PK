@@ -176,7 +176,7 @@ namespace KI_RnB
             CheryEchoThread.StartThread();
 
             TpTimer = new System.Timers.Timer(500);
-            TpTimer.Elapsed += (s, ev) => NeoVI.CAN_Transmit("3E 80");
+            TpTimer.Elapsed += (s, ev) => NeoVI.Send_TesterPresent();
             TpTimer.AutoReset = true;
 
         }
@@ -1019,7 +1019,6 @@ namespace KI_RnB
             SendTP(false);
             if (TSet.CarParam != "")
             {
-                if (ECUs.ECU != ECUs.Chery_1box) { SendTP(true); }
                 TSet.TestDate = Now_Date;                           //측정 일자
                 TSet.Run_Time = DateTime.Now.ToString(H2Y.format0Time);  //진행 시작 시간
                 //TSet.TestTime = DateTime.Now.ToString(H2Y.format0Time);  //측정 시각 시간
@@ -1036,7 +1035,14 @@ namespace KI_RnB
                     TSet.Info_DataAdd(this);                                //Info 생성
                     PSet.Test_CNTRead();                                    //카운터 확인
                     Test = new cls_Test(this);                              //측정 생성
-                    Ret_test = Test.Test_Running(AcptNo);                   //측정 모듈
+                    try // 측정 모듈 
+                    {
+                        Ret_test = Test.Test_Running(AcptNo);
+                    }
+                    finally
+                    {
+                        SendTP(false);
+                    }
                     TSet.End_Time = DateTime.Now.ToString(H2Y.format0Time); //종료 시간
                     TSet.Info_DataAdd(this);                                //Info 업데이트
                     PSet.Test_CNTMake("Pass");                              //카운터 저장

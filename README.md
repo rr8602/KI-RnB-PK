@@ -247,6 +247,96 @@ ISO-TP SN(Sequence Number)은 4비트(0~F)라 `21`…`2F` 다음 `20`으로 순�
 
 ---
 
+### 2026-08-22 — TesterPresent 전 차종 적용 및 ABS 밸브 제어 실패 수정
+
+---
+
+### 1. 증상
+
+| 증상 | 차종 | 내용 |
+|------|------|------|
+| A | LX3 HEV / LX3 ICE | Dynamic Test 2F 밸브 제어가 5단계 중 2~3단계만 성공 |
+| B | LX3 / NX4 (TM) | Dynamic Test 후 주차 브레이크 동작 불가 |
+
+### 2. 원인
+
+**증상 A — ISO-TP PCI 누락 + FF↔CF 사이 TP 침입**
+
+`TpTimer`(500ms)가 `CAN_Transmit("3E 80")`을 직접 호출.
+
+1. ISO-TP Single Frame PCI(`02`)가 누락 → ECU가 프레임 자체를 무시
+2. `Ret_SendMsgs`와 `CAN_Transmit`이 배타 제어 없이 동시 실행 → FF↔CF 사이에 TP 프레임이 끼어들어 ISO-TP 조립 깨짐
+
+**증상 B — Dynamic Test 종료 시 IOControl 제어권 미반납**
+
+Dynamic Test 완료 후 `Stop_Communication`(Default Session 복귀)이 없어 ECU가 IOControl 제어 상태를 유지. 이후 주차 브레이크 PLC 제어에 ECU가 개입하여 동작 불가.
+
+### 3. 수정 내용
+
+#### 3.1 clsNeoVI.cs
+
+| # | 항목 | 수정 전 | 수정 후 |
+|---|------|---------|---------|
+| ① | TP 프레임 | `"3E 80"` (PCI 없음) | `"02 3E 80"` (ISO-TP SF PCI 포함) |
+| ② | 송신 배타 락 | 없음 | `TxLock` + `Ret_SendMsgs` 전체 `lock(TxLock)` |
+| ③ | TP 전용 함수 | 없음 | `Send_TesterPresent()` — `Monitor.TryEnter`로 통신 중 skip |
+| ④ | STD_CAN_Write 비Chery 지연 | `Sleep(500)` | `Sleep(30)` (FF→CF 51ms) |
+
+```csharp
+// Monitor.TryEnter: 통신 중이면 이번 주기 건너뜀, 500ms 후 재시도
+public static void Send_TesterPresent()
+{
+    if (!IsOpen) return;
+    if (!System.Threading.Monitor.TryEnter(TxLock)) return;
+    try { CAN_Transmit("02 3E 80"); }
+    finally { System.Threading.Monitor.Exit(TxLock); }
+}
+```
+
+#### 3.2 fom_Main.cs
+
+| # | 항목 | 내용 |
+|---|------|------|
+| ⑤ | TpTimer 핸들러 | `CAN_Transmit("3E 80")` → `Send_TesterPresent()` |
+| ⑥ | SendTP(true) 위치 | `OrderStarted` CarParam 블록 → `Test_Running` ECU_Selector 직후 |
+| ⑦ | SendTP(false) 보장 | `Test_Running` 호출을 `try/finally`로 감싸 비정상 종료 시에도 TP 종료 |
+
+#### 3.3 cls_Test.cs
+
+| # | 항목 | 내용 |
+|---|------|------|
+| ⑧ | SendTP(true) 위치 | `Test_Running()` — `ECU_Selector` 직후 (Chery 제외) |
+| ⑨ | Dynamic_Close() 추가 | `Stop_Communication` + `SendTP(false)` + `ABS_Step=5` 일괄 처리 |
+| ⑩ | LX3 Dynamic_Test 확장 | step 6~9 (FL+RR 밸브 + Pump) 추가. LX3H/LX3I만 해당 |
+
+```csharp
+private void Dynamic_Close()
+{
+    ECUs.Stop_Communication();   // 10 01 — IOControl 제어권 반납
+    main.SendTP(false);
+    ECUs.ABS_Step = 5;
+}
+```
+
+#### 3.4 LX3 Dynamic_Test 확장
+
+| Step | LX3 HEV (F01E) | LX3 ICE (F01E) |
+|------|---------|---------|
+| 1~4 | FR+RL 밸브 4종 | FR+RL 밸브 4종 |
+| 5~8 | FL+RR 밸브 4종 | FL+RR 밸브 4종 |
+| 9 | HEV Pump on | ICE Pump on (F011) |
+
+### 4. 실차 검증 결과
+
+| 차종 | Dynamic | 주차 브레이크 | 작업번호 |
+|------|---------|--------------|---------|
+| NX4 PE HEV (TM) | 5/5 성공 | 정상 | 2026082200017 |
+| LX3 HEV | 9/9 성공 | 정상 | 2026082200019 |
+| LX3 ICE | 9/9 성공 | 정상 | 2026082200020 |
+| FF↔CF TP 침입 | 0건 | — | — |
+
+---
+
 ## LX3 ABS 검사 시퀀스 (33 Steps / 167 sec)
 
 | Phase | 구간 | 주요 내용 | 시스템 |

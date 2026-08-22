@@ -618,6 +618,7 @@ namespace KI_RnB
             Logs.Test_History(Log_His.Info, TSet.CarDrive);
 
             ECUs.ECU_Selector(TSet.ECUModel);
+            if (ECUs.ECU != ECUs.Chery_1box) { main.SendTP(true); }
 
             Fom_Test.Show();
             Fom_Test.Refresh_Info();
@@ -788,6 +789,7 @@ namespace KI_RnB
                         NI.Stop();
                         NI.Start();
                         RnB__Started(pTestNo);
+                        if (ECUs.ECU != ECUs.Chery_1box) { ECUs.Stop_Communication(); }
                     }
                 }
 
@@ -2412,7 +2414,7 @@ Retest_COMMUNICATION:
                 }
                 else
                 {
-                    ECUs.ABS_Step = 5;
+                    Dynamic_Close();
                 }
             }
 
@@ -2468,7 +2470,7 @@ Retest_COMMUNICATION:
 
             if (TSet.ECU_Flag && TSet.ECU_Setp == 20)
             {
-                ECUs.ABS_Step = 5;
+                Dynamic_Close();
             }
 
             return NeoVI.Return;
@@ -2514,6 +2516,13 @@ Retest_COMMUNICATION:
             if (!TSet.ECU_Errs) TSet.ECU_Errs = NeoVI.Return;
 
             return NeoVI.Return;
+        }
+
+        private void Dynamic_Close()
+        {
+            ECUs.Stop_Communication();   // 10 01 — 제어권 반납 + 세션 종료
+            main.SendTP(false);          // TP 종료
+            ECUs.ABS_Step = 5;
         }
         #endregion
     }

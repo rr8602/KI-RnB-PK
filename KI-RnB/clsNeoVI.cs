@@ -12,6 +12,7 @@ namespace KI_RnB
     public static class NeoVI
     {
         private static StringBuilder Get_Buf = new StringBuilder();
+        private static readonly object TxLock = new object();
         private static IntPtr m_hObject;		 //handle for device
         private static OptionsNeoEx neoDeviceOption = new OptionsNeoEx();
         private static int iOpenDeviceType; //Storage for the device type that is open
@@ -848,7 +849,7 @@ namespace KI_RnB
                 }
                 else
                 {
-                    H2Y.Sleep(500);
+                    H2Y.Sleep(30);
 
                 }
                 
@@ -1092,74 +1093,86 @@ namespace KI_RnB
 
         public static bool Ret_SendMsgs(string Msgs)
         {
-            bool Ret = true;
-            double ReadTime = 0, Old_Time = 0;
-            double OfstTime = DateTime.Now.Ticks;
-            double Gap_Time = 1;
-            double Gap_Ofst = 0;
-            int Old_Len = 0;
-            bool TestFlag = false;
-            bool Key_Pass = false;
-            bool old_Pass = false;
-
-            ECU_Clear();
-
-            if (!NeoVI.IsOpen) { return false; }
-
-            Return = false;
-            Device_Write(Msgs);
-            
-            while (true)
+            lock (TxLock)
             {
-                //Device_Read(); 
-                //break;
-                #region 측정 헤더
-                if (TSet.TestStop) break;
-                if (PLC.DO.MD_Emerge) break;
-                if (PLC.DI.PSW__Stop) break;
-                if (TestFlag) { TestFlag = false; }
-                if (TSet.StepNext) TSet.StepNext = false;
+                bool Ret = true;
+                double ReadTime = 0, Old_Time = 0;
+                double OfstTime = DateTime.Now.Ticks;
+                double Gap_Time = 1;
+                double Gap_Ofst = 0;
+                int Old_Len = 0;
+                bool TestFlag = false;
+                bool Key_Pass = false;
+                bool old_Pass = false;
 
-                ReadTime = (DateTime.Now.Ticks - OfstTime) / H2Y.tick_Dvd;
+                ECU_Clear();
 
-                if ((H2Y.GetKeyState(H2Y.VK_SHIFT) & H2Y.KeyPressed) != 0 && (H2Y.GetKeyState(H2Y.VK_RETURN) & H2Y.KeyPressed) != 0)
+                if (!NeoVI.IsOpen) { return false; }
+
+                Return = false;
+                Device_Write(Msgs);
+
+                while (true)
                 {
-                    Key_Pass = true;
-                }
-                else
-                {
-                    Key_Pass = false;
-                }
+                    //Device_Read(); 
+                    //break;
+                    #region 측정 헤더
+                    if (TSet.TestStop) break;
+                    if (PLC.DO.MD_Emerge) break;
+                    if (PLC.DI.PSW__Stop) break;
+                    if (TestFlag) { TestFlag = false; }
+                    if (TSet.StepNext) TSet.StepNext = false;
 
-                if (Key_Pass && Key_Pass != old_Pass) { TSet.StepNext = true; }
-                if (Key_Pass != old_Pass) { old_Pass = Key_Pass; }
-                #endregion
+                    ReadTime = (DateTime.Now.Ticks - OfstTime) / H2Y.tick_Dvd;
 
-                if (Get_Buf.Length != Old_Len) { Old_Len = Get_Buf.Length; Gap_Ofst = ReadTime; }
-                if (Return) { Ret = true; break; }
-                if (ReadTime - Gap_Ofst > Gap_Time) { Ret = false; break; }
-
-                if ((ReadTime - Old_Time) >= 0.05)
-                {
-                    Old_Time = ReadTime;
-                    if (!IsRead) 
+                    if ((H2Y.GetKeyState(H2Y.VK_SHIFT) & H2Y.KeyPressed) != 0 && (H2Y.GetKeyState(H2Y.VK_RETURN) & H2Y.KeyPressed) != 0)
                     {
-                        Device_Read(); 
+                        Key_Pass = true;
                     }
+                    else
+                    {
+                        Key_Pass = false;
+                    }
+
+                    if (Key_Pass && Key_Pass != old_Pass) { TSet.StepNext = true; }
+                    if (Key_Pass != old_Pass) { old_Pass = Key_Pass; }
+                    #endregion
+
+                    if (Get_Buf.Length != Old_Len) { Old_Len = Get_Buf.Length; Gap_Ofst = ReadTime; }
+                    if (Return) { Ret = true; break; }
+                    if (ReadTime - Gap_Ofst > Gap_Time) { Ret = false; break; }
+
+                    if ((ReadTime - Old_Time) >= 0.05)
+                    {
+                        Old_Time = ReadTime;
+                        if (!IsRead)
+                        {
+                            Device_Read();
+                        }
+                    }
+
+                    System.Windows.Forms.Application.DoEvents();
                 }
 
-                System.Windows.Forms.Application.DoEvents();
-            }
+                if (PSet.OnfDebug)
+                {
+                    //Main.FomDebug.ECUs_Message(Ret.ToString());
+                }
 
-            if (PSet.OnfDebug)
-            {
-                //Main.FomDebug.ECUs_Message(Ret.ToString());
+                tmr_Wait.Interval = 1000;
+                tmr_Wait.Enabled = true;
+                return Ret;
             }
-
-            tmr_Wait.Interval = 1000;
-            tmr_Wait.Enabled = true;
-            return Ret; 
         }
+
+        public static void Send_TesterPresent()
+        {
+            if (!IsOpen) return;
+            if (!System.Threading.Monitor.TryEnter(TxLock)) return;   // 통신 중이면 건너뜀
+            try { CAN_Transmit("02 3E 80"); }
+            finally { System.Threading.Monitor.Exit(TxLock); }
+        }
+
         private static int Ret_Length(string Msgs)
         {
             Msgs = Msgs.TrimStart(' ');
