@@ -337,6 +337,32 @@ private void Dynamic_Close()
 
 ---
 
+### 2026-09-15 — Load 교정 인디게이터 체크 오류 수정 (fom_Load.cs)
+
+---
+
+### 1. 증상
+
+LOAD 교정 Start 버튼 클릭 시 VFD(롤러)가 구동되면서 "Indicator is not connected." 팝업이 뜨고, 팝업 닫아도 롤러가 계속 회전.
+
+인디게이터 하드웨어는 정상(초록 점멸, ZERO 동작), 봉신 값도 정상 수신 중.
+
+### 2. 원인
+
+| # | 항목 | 내용 |
+|---|------|------|
+| ① | 잘못된 IsOpen 체크 | `Fom_Main.Pedal`은 **페달 브레이크 게이지** 객체. Load 교정에서 실제 사용하는 인디게이터는 `BS205`(Indi_S/Indi_P 설정)인데, 엉뚱한 객체의 IsOpen을 체크 |
+| ② | 에러 경로 롤러 미정지 | btnStart_Click에서 `Mot_Stt=true`로 VFD 시작. 에러 팝업 경로에서는 `Calibrations()` → `Order__Free()`가 호출되지 않아 `Mot_Stt`가 true인 채로 유지 |
+
+### 3. 수정 내용 (fom_Load.cs)
+
+| # | 수정 전 | 수정 후 |
+|---|---------|---------|
+| ① | `if (!Fom_Main.Pedal.IsOpen)` | `if (!BS205.IsOpen)` |
+| ② | 클린업 코드에 Mot_Stt 처리 없음 | `switch(selWheel)` → `Mot_Stt=false` 추가 (PLC_Put_D500 전송으로 전달) |
+
+---
+
 ## LX3 ABS 검사 시퀀스 (33 Steps / 167 sec)
 
 | Phase | 구간 | 주요 내용 | 시스템 |

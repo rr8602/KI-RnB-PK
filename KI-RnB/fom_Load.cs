@@ -573,7 +573,7 @@ namespace KI_RnB
             PLC.DO.CalAirSol = false;
             PLC.DO.CalIndi_O = false; PLC.PLC_312_Puts(); //D312
 
-            if (!Fom_Main.Pedal.IsOpen)
+            if (!BS205.IsOpen)
             {
                 MessageBox.Show("Indicator is not connected.\nPlease check the indicator connection and try again.",
                     "Indicator Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -593,6 +593,14 @@ namespace KI_RnB
                 {
                     MessageBox.Show(ex.Message);
                 }
+            }
+
+            switch (selWheel)
+            {
+                case 0: PLC.DO.FLMot_Stt = false; break;
+                case 1: PLC.DO.FRMot_Stt = false; break;
+                case 2: PLC.DO.RLMot_Stt = false; break;
+                case 3: PLC.DO.RRMot_Stt = false; break;
             }
 
             StartOnf = false;
